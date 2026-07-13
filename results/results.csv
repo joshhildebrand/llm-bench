@@ -23,3 +23,7 @@ timestamp,model,label,quant,ctx,parallel,gpu_ratio,flash,kv_quant,threads,mtp,mo
 1783981202,bench,q4_256k_exp0.82_at16k,q4_k_xl,262144,1,max,on,q8_0,8,on,decode,11042,48,200.382,14.025,55.105,0.882,1
 1783981238,bench,q4_256k_exp0.78_empty,q4_k_xl,262144,1,max,on,q8_0,8,on,decode,77.0,200.0,557.877,21.574,0.139,0.921,2
 1783981296,bench,q4_256k_exp0.78_at16k,q4_k_xl,262144,1,max,on,q8_0,8,on,decode,11042,48,203.455,13.872,54.272,0.906,1
+1783982026,bench,q5_k_xl_128k_mtp_d4,q5_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,541.845,20.158,0.142,0.953,3
+1783982092,bench,q5_k_xl_128k_mtp_d4,q5_k_xl,131072,1,max,on,q8_0,8,on,prefill,11042.0,1.0,3376.123,1000000.0,3.271,None,2
+1783982166,bench,q6_k_xl_128k_mtp_d4,q6_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,529.756,18.962,0.145,0.912,3
+1783982241,bench,q6_k_xl_128k_mtp_d4,q6_k_xl,131072,1,max,on,q8_0,8,on,prefill,11042.0,1.0,2996.021,1000000.0,3.686,None,2

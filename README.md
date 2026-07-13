@@ -92,7 +92,14 @@ feel in chat); prefill = prompt ingest tok/s. All single-stream unless noted.
 | Q8_K_XL, 128k, parallel 1 | 16.3 | +4% | freeing KV barely helps — Q8 is VRAM-capped |
 | Q4_K_XL, 128k, MTP draft 2 | 19.2 | +22% | quant is the big lever |
 | Q4_K_XL, 128k, MTP **draft 4** | 20.6 | +31% | deeper MTP drafting |
-| **Q4_K_XL, 128k, MTP draft 4, experts 0.70, threads 8 — WINNER** | **20.8** | **+33%** | recommended single-stream |
+| **Q4_K_XL, 128k, draft 4, experts 0.70, threads 8** | **20.8** | **+33%** | max speed |
+| **Q5_K_XL, 128k, draft 4, threads 8** | **20.2** | **+29%** | **best balance — ~Q4 speed, higher precision + 95% MTP accept** |
+| Q6_K_XL, 128k, draft 4, threads 8 | 19.0 | +21% | slower, diminishing returns |
+
+**Quant curve (all at the tuned 128k config):** the decode rate barely moves across Q4→Q5→Q6 (20.8 /
+20.2 / 19.0) even though file size grows 23→27→33 GB. Decode is bound by *active* expert bytes/token,
+and the UD quants' active-tensor delta between Q4 and Q5 is small — so **Q5 buys precision for ~free**.
+Only Q8 (15.7) falls off, because at 40.9 GB far fewer expert layers fit on the GPU.
 
 Prefill is not a bottleneck: **16k tokens ingest in ~3 s (≈3700 tok/s)** even at 128k context, so
 large context is cheap on the prompt side — the cost of big context is memory, not prefill time.
@@ -148,22 +155,22 @@ here, but it's the one lever left.
 
 ## Recommended settings
 
-**Single-stream (fastest — use this):** load `qwen3.6-35b-a3b-mtp@q4_k_xl`, apply
-`presets/qwen3.6-q4-single-stream.json` (ctx 131072, flash on, KV q8_0, MTP draft 4, threads 8,
-experts 0.70), vision projector disabled. → **~20.8 tok/s at 128k context.**
+Both are single-stream, 128k context, vision projector disabled. **Pick Q5 unless you want the last
+~3%.** Presets in `presets/`.
+
+**Q5_K_XL — best balance (default, loaded):** `presets/qwen3.6-q5-balanced.json` — ctx 131072, flash on,
+KV q8_0, MTP draft 4, threads 8, experts 0.80. → **~20.2 tok/s, higher precision, 95% MTP accept.**
+
+**Q4_K_XL — max speed:** `presets/qwen3.6-q4-single-stream.json` — same but experts 0.70. → **~20.8 tok/s.**
 
 ```bash
 ./disable_vision.sh                       # one-time; frees 1.8 GB VRAM for text use
-GGUF=unsloth/Qwen3.6-35B-A3B-MTP-GGUF/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
+GGUF=unsloth/Qwen3.6-35B-A3B-MTP-GGUF/Qwen3.6-35B-A3B-UD-Q5_K_XL.gguf   # or ...Q4...
 python3 apply_config.py --gguf "$GGUF" \
   --set ctx=131072 --set flash=true --set kcache=q8_0 --set vcache=q8_0 \
-  --set mtp=true --set draft_max=4 --set threads=8 --set cpu_experts=0.70 --set kv_to_gpu=false
-lms load qwen3.6-35b-a3b-mtp@q4_k_xl --identifier bench --parallel 1 -y
+  --set mtp=true --set draft_max=4 --set threads=8 --set cpu_experts=0.80 --set kv_to_gpu=false
+lms load qwen3.6-35b-a3b-mtp@q5_k_xl --identifier bench --parallel 1 -y
 ```
 
-### Optional: Q5/Q6 for quality
-
-Q4 quality is good, but Q5_K_XL / Q6_K_XL trade speed for a bit more fidelity. They are **slower**
-(more bytes/token → expect ~17–18 and ~15–16 tok/s respectively by the bandwidth ratio), so they only
-make sense if Q4 quality proves insufficient. `models.json` lists them; download was deferred (HF was
-rate-limiting the CDN). To bench when downloaded, point `sweep.sh` at the `@q5_k_xl` / `@q6_k_xl` tags.
+Q6_K_XL (19.0 tok/s) offers no advantage over Q5 here — same fidelity ballpark, slower. Q8_K_XL only
+if you need maximum fidelity and accept 15.7 tok/s.
