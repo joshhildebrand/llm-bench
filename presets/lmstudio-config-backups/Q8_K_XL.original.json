@@ -1,0 +1,76 @@
+{
+  "preset": "",
+  "operation": {
+    "fields": []
+  },
+  "load": {
+    "fields": [
+      {
+        "key": "llm.load.contextLength",
+        "value": 262144
+      },
+      {
+        "key": "llm.load.llama.cpuThreadPoolSize",
+        "value": 8
+      },
+      {
+        "key": "llm.load.llama.acceleration.offloadRatio",
+        "value": 1
+      },
+      {
+        "key": "llm.load.offloadKVCacheToGpu",
+        "value": false
+      },
+      {
+        "key": "llm.load.numCpuExpertLayersRatio",
+        "value": 0.926829268292683
+      },
+      {
+        "key": "llm.load.llama.flashAttention",
+        "value": true
+      },
+      {
+        "key": "llm.load.llama.speculativeDecoding.draftMtp",
+        "value": true
+      },
+      {
+        "key": "llm.load.llama.speculativeDecoding.draftSimple",
+        "value": false
+      },
+      {
+        "key": "llm.load.llama.speculativeDecoding.draftModel",
+        "value": ""
+      },
+      {
+        "key": "llm.load.llama.speculativeDecoding.draftMaxTokens",
+        "value": 2
+      },
+      {
+        "key": "llm.load.llama.speculativeDecoding.draftMinTokens",
+        "value": 0
+      },
+      {
+        "key": "llm.load.llama.speculativeDecoding.draftMinContinueProbability",
+        "value": 0.75
+      },
+      {
+        "key": "llm.load.llama.kCacheQuantizationType",
+        "value": {
+          "checked": true,
+          "value": "q8_0"
+        }
+      },
+      {
+        "key": "llm.load.llama.vCacheQuantizationType",
+        "value": {
+          "checked": true,
+          "value": "q8_0"
+        }
+      },
+      {
+        "key": "llm.load.llama.physicalBatchSize",
+        "value": 512
+      }
+    ]
+  }
+}

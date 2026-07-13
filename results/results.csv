@@ -1,0 +1,6 @@
+timestamp,model,label,quant,ctx,parallel,gpu_ratio,flash,kv_quant,threads,mtp,mode,prompt_tokens,completion_tokens,pp_tok_s,tg_tok_s,ttft_s,accept_rate,runs
+1783977193,qwen3.6-35b-a3b-mtp,baseline_q8_256k_p4,q8_k_xl,262144,4,max,unknown,unknown,unknown,on,decode,77,256,422.594,15.706,0.182,0.965,3
+1783977223,qwen3.6-35b-a3b-mtp,baseline_q8_256k_p4,q8_k_xl,262144,4,max,unknown,unknown,unknown,on,prefill,1400.0,1.0,362.162,1000000.0,3.866,None,2
+1783977318,qwen3.6-35b-a3b-mtp,baseline_q8_256k_p4,q8_k_xl,262144,4,max,unknown,unknown,unknown,on,prefill,11042,1,2557.094,1000000,4.318,None,1
+1783977442,qwen3.6-35b-a3b-mtp,q8_128k_p1,q8_k_xl,131072,1,max,unknown,unknown,unknown,on,decode,77,256,480.943,16.341,0.16,0.965,3
+1783977894,qwen3.6-35b-a3b-mtp@q8_k_xl,q8_experts1.0_allcpu,q8_k_xl,262144,1,max,on,q8_0,8,on,decode,77,256,427.654,14.327,0.18,0.964,3
