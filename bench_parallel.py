@@ -81,7 +81,7 @@ def main():
     row = {
         "timestamp": int(time.time()),
         "machine_id": ARGS.machine_id or machine.ensure_registered(),
-        "model": ARGS.model, "label": ARGS.label,
+        "model": ARGS.model_name or ARGS.model, "label": ARGS.label,
         "quant": ARGS.quant, "ctx": ARGS.ctx, "parallel": ARGS.parallel,
         "concurrency": ARGS.concurrency, "gpu_ratio": ARGS.gpu, "flash": ARGS.flash,
         "kv_quant": ARGS.kv_quant, "threads": ARGS.threads, "mtp": ARGS.mtp,
@@ -104,7 +104,10 @@ def main():
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
-    p.add_argument("--model", required=True)
+    p.add_argument("--model", required=True,
+                   help="API model id to send requests to (the loaded identifier)")
+    p.add_argument("--model-name", default=None, dest="model_name",
+                   help="model name recorded in the CSV (default: --model)")
     p.add_argument("--prompt", required=True)
     p.add_argument("--concurrency", type=int, default=4)
     p.add_argument("--max-tokens", type=int, default=256, dest="max_tokens")

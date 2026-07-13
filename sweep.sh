@@ -67,7 +67,7 @@ run_config() {
   fi
   wait_ready || return 1
 
-  local common=(--model "$ID" --thinking "$THINKING" --quant "$QUANT"
+  local common=(--model "$ID" --model-name "$MODEL_KEY" --thinking "$THINKING" --quant "$QUANT"
     --ctx "$ctx" --parallel "$PARALLEL" --gpu max --mtp on
     --flash on --kv-quant "$kc" --threads "$threads"
     --label "$label" --runs "$RUNS" --warmup "$WARMUP")

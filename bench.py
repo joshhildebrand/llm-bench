@@ -116,7 +116,7 @@ def main() -> int:
     row = {
         "timestamp": int(time.time()),
         "machine_id": args.machine_id or machine.ensure_registered(),
-        "model": args.model,
+        "model": args.model_name or args.model,
         "label": args.label,
         "quant": args.quant,
         "ctx": args.ctx,
@@ -151,7 +151,11 @@ def main() -> int:
 
 if __name__ == "__main__":
     p = argparse.ArgumentParser()
-    p.add_argument("--model", required=True)
+    p.add_argument("--model", required=True,
+                   help="API model id to send requests to (the loaded identifier)")
+    p.add_argument("--model-name", default=None, dest="model_name",
+                   help="model name recorded in the CSV (default: --model). Use when "
+                        "loading under a stable identifier so rows show the real model.")
     p.add_argument("--mode", choices=["decode", "prefill"], default="decode")
     p.add_argument("--prompt", required=True)
     p.add_argument("--max-tokens", type=int, default=256, dest="max_tokens")
