@@ -1,4 +1,4 @@
-timestamp,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,kv_quant,threads,mtp,agg_tok_s,mean_stream_tok_s,total_completion_tokens,wall_s
-1783979467,bench,q4_tput,q4_k_xl,32768,4,1,max,on,q8_0,8,on,19.624,20.016,200,10.192
-1783979487,bench,q4_tput,q4_k_xl,32768,4,2,max,on,q8_0,8,on,20.401,10.445,400,19.607
-1783979531,bench,q4_tput,q4_k_xl,32768,4,4,max,on,q8_0,8,on,19.662,5.331,800,40.689
+timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,kv_quant,threads,mtp,agg_tok_s,mean_stream_tok_s,total_completion_tokens,wall_s
+1783979467,i7-5960x-gtx1070-8g-64g-orig,bench,q4_tput,q4_k_xl,32768,4,1,max,on,q8_0,8,on,19.624,20.016,200,10.192
+1783979487,i7-5960x-gtx1070-8g-64g-orig,bench,q4_tput,q4_k_xl,32768,4,2,max,on,q8_0,8,on,20.401,10.445,400,19.607
+1783979531,i7-5960x-gtx1070-8g-64g-orig,bench,q4_tput,q4_k_xl,32768,4,4,max,on,q8_0,8,on,19.662,5.331,800,40.689

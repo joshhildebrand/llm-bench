@@ -3,3 +3,7 @@ __pycache__/
 results/raw/
 *.tmp
 .venv/
+
+# Per-machine identity — each clone mints its own; never shared/committed so a
+# machine's id is not inherited across a pull. Registry lives in machines/<id>.json.
+.machine_id

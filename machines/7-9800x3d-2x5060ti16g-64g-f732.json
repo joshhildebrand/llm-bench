@@ -1,0 +1,32 @@
+{
+  "machine_id": "7-9800x3d-2x5060ti16g-64g-f732",
+  "first_seen": 1783982055,
+  "specs": {
+    "cpu": "AMD Ryzen 7 9800X3D 8-Core Processor",
+    "cpu_cores_physical": 8,
+    "cpu_cores_logical": 16,
+    "ram_gb": 63.6,
+    "gpus": [
+      {
+        "index": 0,
+        "name": "NVIDIA GeForce RTX 5060 Ti",
+        "vram_mib": 16311,
+        "pcie_gen_max": 5,
+        "pcie_width_max": 16,
+        "pcie_gen_cur": 5,
+        "pcie_width_cur": 8
+      },
+      {
+        "index": 1,
+        "name": "NVIDIA GeForce RTX 5060 Ti",
+        "vram_mib": 16311,
+        "pcie_gen_max": 4,
+        "pcie_width_max": 8,
+        "pcie_gen_cur": 1,
+        "pcie_width_cur": 1
+      }
+    ],
+    "gpu_summary": "2x NVIDIA GeForce RTX 5060 Ti 16GB (1 on PCIe x1)",
+    "os": "Windows 11"
+  }
+}
