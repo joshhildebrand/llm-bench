@@ -35,3 +35,5 @@ timestamp,machine_id,model,label,quant,ctx,parallel,gpu_ratio,flash,kv_quant,thr
 1783982590,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,q4kxl_128k_p1_mtp_fullgpu_confirm_dualgpu,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,583.333,84.353,0.132,0.673,3
 1783983940,i7-5960x-1x10708g-63g-16b2,qwen3.6-35b-a3b-mtp,q4_ctx8k_mtp_off,q4_k_xl,8192,1,max,on,q8_0,8,off,decode,77,256,650.321,14.565,0.118,None,3
 1783983996,i7-5960x-1x10708g-63g-16b2,qwen3.6-35b-a3b-mtp,q4_ctx8k_mtp_on,q4_k_xl,8192,1,max,on,q8_0,8,on,decode,77,256,581.479,20.859,0.132,0.917,3
+1783984593,i7-5960x-1x10708g-63g-16b2,qwen3.6-35b-a3b-mtp,q4_128k_FULLCPU_mtp_d4,q4_k_xl,131072,1,off,on,q8_0,8,on,decode,77,256,490.902,15.012,0.157,0.933,3
+1783984661,i7-5960x-1x10708g-63g-16b2,qwen3.6-35b-a3b-mtp,q4_128k_FULLCPU_mtp_d4,q4_k_xl,131072,1,off,on,q8_0,8,on,prefill,11042.0,1.0,3187.646,1000000.0,3.464,None,2
