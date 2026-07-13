@@ -81,9 +81,72 @@ lms get unsloth/Qwen3.6-35B-A3B-MTP-GGUF@q4_k_xl
 ```
 Pass the resulting model key to `sweep.sh` with a matching `<quant-label>` so the CSV records it.
 
-## Results
+## Results (Qwen3.6-35B-A3B, this machine)
 
-See `results/results.csv` (single-stream) and `results/throughput.csv` (concurrent). Findings and the
-recommended single-stream / throughput presets are written up here as the sweep progresses.
+Full data in `results/results.csv` + `results/throughput.csv`. Decode = generation tok/s (what you
+feel in chat); prefill = prompt ingest tok/s. All single-stream unless noted.
 
-_TBD — populated by the optimization sweep._
+| Config | Decode tok/s | vs baseline | Notes |
+|---|---:|---:|---|
+| **Q8_K_XL, 256k ctx, parallel 4 (as-found baseline)** | 15.7 | — | MTP on, KV q8_0, flash on |
+| Q8_K_XL, 128k, parallel 1 | 16.3 | +4% | freeing KV barely helps — Q8 is VRAM-capped |
+| Q4_K_XL, 128k, MTP draft 2 | 19.2 | +22% | quant is the big lever |
+| Q4_K_XL, 128k, MTP **draft 4** | 20.6 | +31% | deeper MTP drafting |
+| **Q4_K_XL, 128k, MTP draft 4, experts 0.70, threads 8 — WINNER** | **20.8** | **+33%** | recommended single-stream |
+
+Prefill is not a bottleneck: **16k tokens ingest in ~3 s (≈3700 tok/s)** even at 128k context, so
+large context is cheap on the prompt side — the cost of big context is memory, not prefill time.
+
+### What moved the needle (and what didn't)
+
+1. **Quantization Q8→Q4 (biggest lever, +~1.5× raw decode).** Decode here is bound by streaming the
+   ~3B active expert weights from RAM (quad-channel DDR4-2400 ≈ 77 GB/s). Q4 ~halves bytes/token.
+   Q4 output quality verified coherent (correct arithmetic, clean reasoning) — UD dynamic quants hold
+   up well on MoE. **This is the single most important change.**
+2. **MTP draft depth 2→4 (+~7%).** The model ships a multi-token-prediction head; drafting 4 tokens
+   with ~92% acceptance beats the default 2. Past 4 gives nothing (accept rate falls). `draft_max=4`.
+3. **Threads = 8 (physical cores).** 8 → 20.8, 6 → 19.3, **16 → 16.3**. Hyperthreading badly hurts this
+   bandwidth-bound workload — never use all 16 threads.
+4. **Disable the vision projector for text.** The repo ships `mmproj-F32.gguf` (1.8 GB F32) which LM
+   Studio auto-loads onto the GPU. At Q4 (more layers offloaded) it overflows the 8 GB card and the
+   server **SIGABRTs at 128k** (`cudaMalloc failed` inside `clip_init`). Renaming it `.disabled` frees
+   ~1.8 GB and is what lets Q4 load at 128k. See `disable_vision.sh` / `restore_vision.sh`.
+5. **Marginal / no effect:** `numCpuExpertLayersRatio` (VRAM is saturated ~7 GB either way, so pushing
+   more experts to GPU doesn't fit — 0.70 ≈ 0.60), KV-cache→GPU (no room), context 128k vs 256k.
+
+### Throughput / concurrency — no gain on this box
+
+Aggregate tok/s is **flat at ~20 regardless of concurrency** (1/2/4 streams → 19.6 / 20.4 / 19.7),
+per-stream just divides (20 → 10.4 → 5.3). The shared expert-weight reads saturate memory bandwidth,
+so batching users does **not** raise total throughput here — unlike a GPU-bound setup. **Use
+parallel=1**; only raise it if you specifically need concurrent sessions and accept proportionally
+slower each.
+
+### The hard ceiling
+
+CPU-side decode is capped by RAM bandwidth. DDR4-2400 quad-channel ≈ 77 GB/s; at ~3.3 GB/token (Q4)
+that's a theoretical ~23 tok/s, and we reach ~21. The only way past it is faster RAM (BIOS XMP to
+2666–2933 ≈ +10–20%) — the CPU is overclocked but the RAM is not. That's a BIOS change, out of scope
+here, but it's the one lever left.
+
+## Recommended settings
+
+**Single-stream (fastest — use this):** load `qwen3.6-35b-a3b-mtp@q4_k_xl`, apply
+`presets/qwen3.6-q4-single-stream.json` (ctx 131072, flash on, KV q8_0, MTP draft 4, threads 8,
+experts 0.70), vision projector disabled. → **~20.8 tok/s at 128k context.**
+
+```bash
+./disable_vision.sh                       # one-time; frees 1.8 GB VRAM for text use
+GGUF=unsloth/Qwen3.6-35B-A3B-MTP-GGUF/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
+python3 apply_config.py --gguf "$GGUF" \
+  --set ctx=131072 --set flash=true --set kcache=q8_0 --set vcache=q8_0 \
+  --set mtp=true --set draft_max=4 --set threads=8 --set cpu_experts=0.70 --set kv_to_gpu=false
+lms load qwen3.6-35b-a3b-mtp@q4_k_xl --identifier bench --parallel 1 -y
+```
+
+### Optional: Q5/Q6 for quality
+
+Q4 quality is good, but Q5_K_XL / Q6_K_XL trade speed for a bit more fidelity. They are **slower**
+(more bytes/token → expect ~17–18 and ~15–16 tok/s respectively by the bandwidth ratio), so they only
+make sense if Q4 quality proves insufficient. `models.json` lists them; download was deferred (HF was
+rate-limiting the CDN). To bench when downloaded, point `sweep.sh` at the `@q5_k_xl` / `@q6_k_xl` tags.

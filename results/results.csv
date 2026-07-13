@@ -4,3 +4,16 @@ timestamp,model,label,quant,ctx,parallel,gpu_ratio,flash,kv_quant,threads,mtp,mo
 1783977318,qwen3.6-35b-a3b-mtp,baseline_q8_256k_p4,q8_k_xl,262144,4,max,unknown,unknown,unknown,on,prefill,11042,1,2557.094,1000000,4.318,None,1
 1783977442,qwen3.6-35b-a3b-mtp,q8_128k_p1,q8_k_xl,131072,1,max,unknown,unknown,unknown,on,decode,77,256,480.943,16.341,0.16,0.965,3
 1783977894,qwen3.6-35b-a3b-mtp@q8_k_xl,q8_experts1.0_allcpu,q8_k_xl,262144,1,max,on,q8_0,8,on,decode,77,256,427.654,14.327,0.18,0.964,3
+1783978362,bench,q4_ctx8k_nomtp_autofit,q4_k_xl,8192,1,max,default,default,8,off,decode,77,256,555.331,15.174,0.139,None,3
+1783978465,bench,q4_ctx8k_mtp_autofit,q4_k_xl,8192,1,max,default,default,8,on,decode,77,256,553.594,18.795,0.139,0.936,3
+1783978709,bench,q4_ctx128k_mtp_kvq8_novision,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,602.254,19.177,0.128,0.943,3
+1783978788,bench,q4_128k_mtp_draft3,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,564.094,20.319,0.137,0.924,3
+1783978845,bench,q4_128k_mtp_draft4,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,576.632,20.58,0.134,0.917,3
+1783978914,bench,q4_128k_mtp_draft5,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,541.571,20.355,0.142,0.907,3
+1783978972,bench,q4_128k_mtp_draft6,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,554.527,20.42,0.139,0.906,3
+1783979049,bench,q4_128k_mtp_d4_exp0.70,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,564.897,20.829,0.136,0.917,3
+1783979106,bench,q4_128k_mtp_d4_exp0.60,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,522.931,20.614,0.147,0.917,3
+1783979198,bench,q4_128k_mtp_d4_exp0.70_t16,q4_k_xl,131072,1,max,on,q8_0,16,on,decode,77,256,589.889,16.319,0.131,0.917,3
+1783979258,bench,q4_128k_mtp_d4_exp0.70_t6,q4_k_xl,131072,1,max,on,q8_0,6,on,decode,77,256,524.92,19.34,0.147,0.917,3
+1783979352,bench,q4_WINNER_128k_mtp_d4,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,575.168,20.637,0.134,0.917,3
+1783979411,bench,q4_WINNER_128k_mtp_d4,q4_k_xl,131072,1,max,on,q8_0,8,on,prefill,11042.0,1.0,3740.719,1000000.0,2.952,None,2

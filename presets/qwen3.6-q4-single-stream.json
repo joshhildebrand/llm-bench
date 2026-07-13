@@ -1,0 +1,52 @@
+{
+  "preset": "",
+  "operation": {
+    "fields": []
+  },
+  "load": {
+    "fields": [
+      {
+        "key": "llm.load.contextLength",
+        "value": 131072
+      },
+      {
+        "key": "llm.load.llama.flashAttention",
+        "value": true
+      },
+      {
+        "key": "llm.load.llama.kCacheQuantizationType",
+        "value": {
+          "checked": true,
+          "value": "q8_0"
+        }
+      },
+      {
+        "key": "llm.load.llama.vCacheQuantizationType",
+        "value": {
+          "checked": true,
+          "value": "q8_0"
+        }
+      },
+      {
+        "key": "llm.load.llama.speculativeDecoding.draftMtp",
+        "value": true
+      },
+      {
+        "key": "llm.load.llama.speculativeDecoding.draftMaxTokens",
+        "value": 4
+      },
+      {
+        "key": "llm.load.llama.cpuThreadPoolSize",
+        "value": 8
+      },
+      {
+        "key": "llm.load.offloadKVCacheToGpu",
+        "value": false
+      },
+      {
+        "key": "llm.load.numCpuExpertLayersRatio",
+        "value": 0.7
+      }
+    ]
+  }
+}
