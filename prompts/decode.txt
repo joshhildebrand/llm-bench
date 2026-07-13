@@ -1,0 +1,1 @@
+Write a long, detailed technical explanation of how modern CPUs, memory hierarchies, and DRAM bandwidth affect the throughput of large language model inference. Cover cache levels, memory channels, NUMA, prefetching, and how mixture-of-experts models stream weights from RAM. Be thorough and keep writing continuous prose until you are stopped.

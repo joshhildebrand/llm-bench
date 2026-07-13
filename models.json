@@ -1,0 +1,27 @@
+{
+  "_comment": "Model matrix for the benchmark harness. Add a block to benchmark a new model; no code change needed. 'key' is the LM Studio model key passed to `lms load`. 'hf_repo' is the source for downloading additional quants via `lms get <repo>@<quant>`. 'quants' are the quant tags to sweep (must be downloaded, or listed for `lms get`). 'contexts' are context lengths to test. 'mtp' adds --speculative-draft-mtp. 'thinking' is held constant per model: 'allow' or 'no_think'.",
+  "models": [
+    {
+      "key": "qwen3.6-35b-a3b-mtp",
+      "hf_repo": "unsloth/Qwen3.6-35B-A3B-MTP-GGUF",
+      "quants": ["q4_k_xl", "q5_k_xl", "q6_k_xl", "q8_k_xl"],
+      "contexts": [131072],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": true,
+      "thinking": "allow",
+      "note": "Primary target. MoE 35B total / ~3B active. Currently installed quant: q8_k_xl (40.9GB)."
+    },
+    {
+      "key": "nvidia/nemotron-3-nano-4b",
+      "hf_repo": "lmstudio-community/NVIDIA-Nemotron-3-Nano-4B-GGUF",
+      "quants": ["q8_0"],
+      "contexts": [8192],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "Small model used to prove the harness is model-agnostic (fits fully on the 1070)."
+    }
+  ]
+}
