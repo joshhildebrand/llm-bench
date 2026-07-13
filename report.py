@@ -115,6 +115,12 @@ def build_page(mid: str) -> str:
     tput = _throughput_table(tput_rows)
     if tput:
         parts.append(tput)
+    # Hand-written analysis in machines/<id>.notes.md survives regeneration and is
+    # appended verbatim — so a machine can keep authored prose alongside auto tables.
+    notes = os.path.join(REGISTRY_DIR, mid + ".notes.md")
+    if os.path.exists(notes):
+        with open(notes, encoding="utf-8") as f:
+            parts.append("\n## Notes\n\n" + f.read().strip())
     return "\n".join(parts).rstrip() + "\n"
 
 

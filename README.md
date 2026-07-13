@@ -125,6 +125,14 @@ Empirically, across machines (see each `machines/<id>.md` for the numbers on tha
    onto the GPU; for text-only use it just wastes VRAM (and can OOM at high context). Disable it
    (`disable_vision.sh` / `restore_vision.sh`).
 
+**The best quant depends on your regime — that's why each machine has its own page.** On a
+RAM-bandwidth-bound box (model doesn't fit VRAM) the speed curve across Q4→Q5→Q6 is nearly *flat*,
+so you buy precision almost for free — pick the higher quant. On a VRAM-rich, GPU-bound box (model
+fits) the curve is *steep* and smaller quants win, so the "best-quality Q4" can actually be ~20%
+slower than a leaner Q4. Same model, opposite advice — compare the pages under `machines/`. A related
+warning: at very high context the GPU attention buffer can force enough expert offload that **prefill
+collapses** even while decode stays fast, so validate prompt-ingest time, not just tok/s.
+
 ## Recommended workflow
 
 1. `python3 machine.py --ensure` to register the box.
