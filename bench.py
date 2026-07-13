@@ -29,12 +29,14 @@ import time
 import urllib.error
 import urllib.request
 
+import machine
+
 HOST = os.environ.get("LMS_HOST", "http://localhost:1234")
 ENDPOINT = HOST + "/api/v0/chat/completions"
 
 CSV_COLUMNS = [
-    "timestamp", "model", "label", "quant", "ctx", "parallel", "gpu_ratio",
-    "flash", "kv_quant", "threads", "mtp", "mode", "prompt_tokens",
+    "timestamp", "machine_id", "model", "label", "quant", "ctx", "parallel",
+    "gpu_ratio", "flash", "kv_quant", "threads", "mtp", "mode", "prompt_tokens",
     "completion_tokens", "pp_tok_s", "tg_tok_s", "ttft_s", "accept_rate", "runs",
 ]
 
@@ -113,6 +115,7 @@ def main() -> int:
 
     row = {
         "timestamp": int(time.time()),
+        "machine_id": args.machine_id or machine.ensure_registered(),
         "model": args.model,
         "label": args.label,
         "quant": args.quant,
@@ -158,6 +161,8 @@ if __name__ == "__main__":
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--thinking", choices=["allow", "no_think"], default="allow")
     p.add_argument("--out", default="results/results.csv")
+    p.add_argument("--machine-id", default=None, dest="machine_id",
+                   help="override machine id (default: auto-detect via machine.py)")
     # Config metadata columns (what sweep.sh set; recorded for comparison).
     p.add_argument("--label", default="")
     p.add_argument("--quant", default="")

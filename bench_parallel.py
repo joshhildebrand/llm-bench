@@ -19,12 +19,14 @@ import sys
 import time
 import urllib.request
 
+import machine
+
 HOST = os.environ.get("LMS_HOST", "http://localhost:1234")
 ENDPOINT = HOST + "/api/v0/chat/completions"
 
 CSV_COLUMNS = [
-    "timestamp", "model", "label", "quant", "ctx", "parallel", "concurrency",
-    "gpu_ratio", "flash", "kv_quant", "threads", "mtp",
+    "timestamp", "machine_id", "model", "label", "quant", "ctx", "parallel",
+    "concurrency", "gpu_ratio", "flash", "kv_quant", "threads", "mtp",
     "agg_tok_s", "mean_stream_tok_s", "total_completion_tokens", "wall_s",
 ]
 
@@ -77,7 +79,9 @@ def main():
     mean_stream = round(sum(stream_rates) / len(stream_rates), 3) if stream_rates else None
 
     row = {
-        "timestamp": int(time.time()), "model": ARGS.model, "label": ARGS.label,
+        "timestamp": int(time.time()),
+        "machine_id": ARGS.machine_id or machine.ensure_registered(),
+        "model": ARGS.model, "label": ARGS.label,
         "quant": ARGS.quant, "ctx": ARGS.ctx, "parallel": ARGS.parallel,
         "concurrency": ARGS.concurrency, "gpu_ratio": ARGS.gpu, "flash": ARGS.flash,
         "kv_quant": ARGS.kv_quant, "threads": ARGS.threads, "mtp": ARGS.mtp,
@@ -108,6 +112,8 @@ if __name__ == "__main__":
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--thinking", choices=["allow", "no_think"], default="allow")
     p.add_argument("--out", default="results/throughput.csv")
+    p.add_argument("--machine-id", default=None, dest="machine_id",
+                   help="override machine id (default: auto-detect via machine.py)")
     p.add_argument("--label", default="")
     p.add_argument("--quant", default="")
     p.add_argument("--ctx", default="")

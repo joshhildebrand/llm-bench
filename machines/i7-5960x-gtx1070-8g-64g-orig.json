@@ -1,0 +1,25 @@
+{
+  "machine_id": "i7-5960x-gtx1070-8g-64g-orig",
+  "first_seen": 1783977193,
+  "note": "Original llm-bench box. Specs hand-authored from the repo's first README (not auto-detected); this machine predates machine.py.",
+  "specs": {
+    "cpu": "Intel Core i7-5960X (Haswell-E, OC ~4.3 GHz)",
+    "cpu_cores_physical": 8,
+    "cpu_cores_logical": 16,
+    "ram_gb": 64.0,
+    "ram_note": "DDR4-2400 quad-channel (~77 GB/s ceiling)",
+    "gpus": [
+      {
+        "index": 0,
+        "name": "NVIDIA GeForce GTX 1070",
+        "vram_mib": 8192,
+        "pcie_gen_max": null,
+        "pcie_width_max": null,
+        "pcie_gen_cur": null,
+        "pcie_width_cur": null
+      }
+    ],
+    "gpu_summary": "GTX 1070 8GB",
+    "os": "unknown"
+  }
+}

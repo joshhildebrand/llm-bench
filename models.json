@@ -10,7 +10,7 @@
       "gpu": ["max"],
       "mtp": true,
       "thinking": "allow",
-      "note": "Primary target. MoE 35B total / ~3B active. Currently installed quant: q8_k_xl (40.9GB)."
+      "note": "Primary target. MoE 35B total / ~3B active; ships an MTP (multi-token-prediction) head for speculative decode. Sweep quants to find the largest that fully fits your VRAM at 128k ctx."
     },
     {
       "key": "nvidia/nemotron-3-nano-4b",
@@ -21,7 +21,7 @@
       "gpu": ["max"],
       "mtp": false,
       "thinking": "allow",
-      "note": "Small model used to prove the harness is model-agnostic (fits fully on the 1070)."
+      "note": "Small model used to prove the harness is model-agnostic (fits fully on a small GPU)."
     }
   ]
 }

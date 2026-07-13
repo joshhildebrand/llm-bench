@@ -1,30 +1,25 @@
 # llm-bench
 
 A small, dependency-free harness to measure **tokens/sec** of local models served by
-[LM Studio](https://lmstudio.ai), and to sweep load/runtime configs to find the fastest one.
-Built to optimize `qwen3.6-35b-a3b-mtp` on a bandwidth-constrained box, but **model-agnostic** —
-add a block to `models.json` and it benchmarks anything LM Studio can serve.
+[LM Studio](https://lmstudio.ai), and to sweep load/runtime configs to find the fastest one
+**on whatever box you run it on**. Model-agnostic (add a block to `models.json`) and
+machine-agnostic (each machine tags its own results and gets its own results page).
 
 ## Why this exists
 
-Decode speed on CPU-heavy setups is dominated by **memory bandwidth**: every generated token
-streams the active weights through the cache hierarchy from RAM. For a Mixture-of-Experts model
-(35B total / ~3B active) only the active experts are read per token, so the wins come from:
-shrinking bytes-read-per-token (quantization), right-sizing the KV cache, and offloading the
-compute-heavy attention to the GPU while experts stream from CPU RAM. This harness measures the
-effect of each change instead of guessing.
+The fastest config for a local LLM depends on where the bottleneck is, and that moves with
+your hardware. Two regimes dominate for a Mixture-of-Experts model (e.g. 35B total / ~3B
+active, where only the active experts are read per token):
 
-## Target machine
+- **Fits-in-VRAM (GPU-bound).** If the weights + KV cache fit in your GPU(s), decode is bound
+  by GPU memory bandwidth — very fast. The lever is: pick the largest quant that still fits.
+- **Hybrid (RAM-bandwidth-bound).** If it doesn't fit, the win is to keep every layer's
+  attention/router/shared-expert on the GPU and stream the bulk experts from system RAM
+  (`n-cpu-moe` / `numCpuExpertLayersRatio`). Decode is then bound by RAM bandwidth and the
+  bytes-read-per-token (i.e. quantization).
 
-| | |
-|---|---|
-| CPU | Intel i7-5960X, 8C/16T (Haswell-E), OC ~4.3 GHz |
-| RAM | 64 GB DDR4 @ 2400 MT/s, quad-channel (~77 GB/s ceiling; not OC'd) |
-| GPU | NVIDIA GTX 1070, 8 GB, compute 6.1 (Pascal) |
-| Runtime | LM Studio `llama.cpp nvidia-cuda-avx2 v2.24.0` |
-
-Baseline before tuning: **~15.9 tok/s decode** at Q8_K_XL / 256k ctx / parallel 4, with MTP
-speculative decoding already active (~100% draft acceptance on repetitive prompts).
+This harness *measures* the effect of each change instead of guessing, and records every run
+so nothing is anecdotal.
 
 ## How it measures
 
@@ -38,7 +33,7 @@ acceptance). No OpenAI/LM Studio SDK needed — stdlib `urllib` only.
   (`prompts/prefill_16k.txt`). Measures prompt-processing throughput.
 
 Each measurement runs `--warmup` discarded requests then `--runs` measured, reporting the **median**.
-Every run appends a row to `results/results.csv` tagged with the full config so nothing is anecdotal.
+Every run appends a row to `results/results.csv` tagged with the full config **and the machine id**.
 
 ## Files
 
@@ -47,106 +42,94 @@ Every run appends a row to `results/results.csv` tagged with the full config so 
 | `bench.py` | Single-stream decode/prefill benchmark → `results/results.csv` |
 | `bench_parallel.py` | Concurrent throughput benchmark → `results/throughput.csv` |
 | `sweep.sh` | Driver: loops configs, `lms load`/`unload`, calls the benchmarks |
+| `apply_config.py` | Writes advanced load params LM Studio doesn't expose via `lms load` |
+| `machine.py` | Detects hardware specs, mints/records this machine's id (see below) |
+| `report.py` | Builds a machine's results page `machines/<id>.md` from the CSV |
 | `models.json` | Model matrix (add a block to benchmark a new model) |
+| `machines/` | One `<id>.json` (specs) + `<id>.md` (results) per contributing machine |
 | `prompts/` | Fixed prompts; `gen_prompts.py` regenerates the prefill files |
+
+## Multi-machine tracking
+
+Results from many boxes share one CSV and one repo. Each row carries a non-identifying
+`machine_id` (a spec-derived slug + random suffix, e.g. `7-9800x3d-2x5060ti16g-64g-f732`), and
+each machine gets its own page under [`machines/`](machines/). Identity is automatic:
+
+```bash
+python3 machine.py --ensure     # detect specs, mint id, write machines/<id>.json
+# ... run a sweep (below); every result row is stamped with this machine's id ...
+python3 report.py               # (re)build machines/<id>.md for this machine
+```
+
+The id lives in `.machine_id` (gitignored), so a fresh clone always mints its **own** id
+instead of inheriting one. Only hardware **specs** are recorded — never hostname, username, or
+serials — so the pages are safe to publish. See [`machines/README.md`](machines/README.md).
 
 ## Usage
 
 ```bash
 # One measurement against an already-loaded model:
-python3 bench.py --model qwen3.6-35b-a3b-mtp --mode decode \
+python3 bench.py --model <identifier> --mode decode \
     --prompt prompts/decode.txt --max-tokens 256 --runs 3 --warmup 1 \
-    --quant q8_k_xl --ctx 131072 --parallel 1 --gpu max --mtp on
+    --quant q4_k_xl --ctx 131072 --parallel 1 --gpu max --mtp on
 
 # Full config sweep (unloads/loads per row in sweep.sh CONFIGS):
-FLASH=on KV_QUANT=q8_0 THREADS=8 ./sweep.sh qwen3.6-35b-a3b-mtp q8_k_xl
+./sweep.sh <model-key> <quant-tag> <gguf-rel-path>
 
 # Add throughput passes:
-THROUGHPUT=1 ./sweep.sh qwen3.6-35b-a3b-mtp q8_k_xl
+THROUGHPUT=1 ./sweep.sh <model-key> <quant-tag> <gguf-rel-path>
 ```
+
+On Windows, run `sweep.sh` from Git Bash (the `lms` CLI, `curl`, and `python3` are all on PATH);
+`bench.py` / `machine.py` / `report.py` are pure-stdlib Python and run anywhere.
 
 ### CLI vs GUI knobs
 
 `sweep.sh` sets these via `lms load`: `--gpu`, `-c/--context-length`, `--parallel`,
-`--speculative-draft-mtp`. These are **not** exposed by `lms load` and must be set in the LM Studio
-UI (then exported so they land in the CSV): **flash attention**, **KV-cache quantization**,
-**force MoE expert weights to CPU / offload KV to GPU**, **CPU thread count**. Sweep GUI knobs in
-batches: set the toggle, run `sweep.sh` with `FLASH=/KV_QUANT=/THREADS=` matching what you set.
+`--speculative-draft-mtp`. The **advanced** knobs — flash attention, KV-cache quantization,
+`numCpuExpertLayersRatio` (force MoE experts to CPU), CPU thread count, MTP draft depth — are not
+exposed by `lms load`; `apply_config.py` writes them into the concrete per-model config the server
+reads on load.
 
 ### Benchmarking a specific quant
 
-To compare quants, download them and load the variant you want:
+Download the quant and load the variant you want:
 ```bash
-lms get unsloth/Qwen3.6-35B-A3B-MTP-GGUF@q4_k_xl
+lms get <hf_repo>@<quant>     # e.g. unsloth/Qwen3.6-35B-A3B-MTP-GGUF@q4_k_xl
 ```
-Pass the resulting model key to `sweep.sh` with a matching `<quant-label>` so the CSV records it.
+Pass the resulting model key to `sweep.sh` with a matching `<quant-tag>` so the CSV records it.
 
-## Results (Qwen3.6-35B-A3B, this machine)
+## What tends to move the needle
 
-Full data in `results/results.csv` + `results/throughput.csv`. Decode = generation tok/s (what you
-feel in chat); prefill = prompt ingest tok/s. All single-stream unless noted.
+Empirically, across machines (see each `machines/<id>.md` for the numbers on that box):
 
-| Config | Decode tok/s | vs baseline | Notes |
-|---|---:|---:|---|
-| **Q8_K_XL, 256k ctx, parallel 4 (as-found baseline)** | 15.7 | — | MTP on, KV q8_0, flash on |
-| Q8_K_XL, 128k, parallel 1 | 16.3 | +4% | freeing KV barely helps — Q8 is VRAM-capped |
-| Q4_K_XL, 128k, MTP draft 2 | 19.2 | +22% | quant is the big lever |
-| Q4_K_XL, 128k, MTP **draft 4** | 20.6 | +31% | deeper MTP drafting |
-| **Q4_K_XL, 128k, MTP draft 4, experts 0.70, threads 8 — WINNER** | **20.8** | **+33%** | recommended single-stream |
+1. **Fit the whole model in VRAM if you can (biggest lever when you have the VRAM).** A quant
+   that fully fits GPU memory at your target context decodes far faster than any hybrid, because
+   nothing streams from RAM. On a multi-GPU box this also sidesteps a slow PCIe link between cards:
+   with layer-split, only a tiny per-token hidden state crosses the link, not the weights.
+2. **Quantization is the other big lever.** Fewer bytes-read-per-token → faster decode when you're
+   RAM- or VRAM-bandwidth-bound, and it's what *lets* a model fit. UD dynamic quants hold quality
+   well on MoE; verify coherence at the quant you pick.
+3. **When it doesn't fit, use MoE-aware hybrid offload.** Keep attention/router/shared-expert on
+   GPU (`n-gpu-layers=max`), force bulk experts to CPU (`numCpuExpertLayersRatio`), then lower that
+   ratio a few layers at a time to fill spare VRAM — stop one step before it overfills and regresses.
+4. **MTP / speculative draft depth.** If the model ships a multi-token-prediction head, drafting
+   ~2–4 tokens per step is a free decode speedup (acceptance-dependent; higher on code/structured
+   output). `draft_max=4` is a good default; past that, acceptance falls.
+5. **Threads = physical cores.** Hyperthreading hurts bandwidth-bound MoE decode — never use all
+   logical threads.
+6. **Right-size context and parallelism.** KV cache is pre-allocated for your full context and
+   competes with weights for VRAM; big context or `parallel>1` can force a spill. Use `parallel=1`
+   unless you specifically need concurrent sessions.
+7. **Watch auto-loaded vision projectors.** For multimodal GGUFs, LM Studio auto-loads the mmproj
+   onto the GPU; for text-only use it just wastes VRAM (and can OOM at high context). Disable it
+   (`disable_vision.sh` / `restore_vision.sh`).
 
-Prefill is not a bottleneck: **16k tokens ingest in ~3 s (≈3700 tok/s)** even at 128k context, so
-large context is cheap on the prompt side — the cost of big context is memory, not prefill time.
+## Recommended workflow
 
-### What moved the needle (and what didn't)
-
-1. **Quantization Q8→Q4 (biggest lever, +~1.5× raw decode).** Decode here is bound by streaming the
-   ~3B active expert weights from RAM (quad-channel DDR4-2400 ≈ 77 GB/s). Q4 ~halves bytes/token.
-   Q4 output quality verified coherent (correct arithmetic, clean reasoning) — UD dynamic quants hold
-   up well on MoE. **This is the single most important change.**
-2. **MTP draft depth 2→4 (+~7%).** The model ships a multi-token-prediction head; drafting 4 tokens
-   with ~92% acceptance beats the default 2. Past 4 gives nothing (accept rate falls). `draft_max=4`.
-3. **Threads = 8 (physical cores).** 8 → 20.8, 6 → 19.3, **16 → 16.3**. Hyperthreading badly hurts this
-   bandwidth-bound workload — never use all 16 threads.
-4. **Disable the vision projector for text.** The repo ships `mmproj-F32.gguf` (1.8 GB F32) which LM
-   Studio auto-loads onto the GPU. At Q4 (more layers offloaded) it overflows the 8 GB card and the
-   server **SIGABRTs at 128k** (`cudaMalloc failed` inside `clip_init`). Renaming it `.disabled` frees
-   ~1.8 GB and is what lets Q4 load at 128k. See `disable_vision.sh` / `restore_vision.sh`.
-5. **Marginal / no effect:** `numCpuExpertLayersRatio` (VRAM is saturated ~7 GB either way, so pushing
-   more experts to GPU doesn't fit — 0.70 ≈ 0.60), KV-cache→GPU (no room), context 128k vs 256k.
-
-### Throughput / concurrency — no gain on this box
-
-Aggregate tok/s is **flat at ~20 regardless of concurrency** (1/2/4 streams → 19.6 / 20.4 / 19.7),
-per-stream just divides (20 → 10.4 → 5.3). The shared expert-weight reads saturate memory bandwidth,
-so batching users does **not** raise total throughput here — unlike a GPU-bound setup. **Use
-parallel=1**; only raise it if you specifically need concurrent sessions and accept proportionally
-slower each.
-
-### The hard ceiling
-
-CPU-side decode is capped by RAM bandwidth. DDR4-2400 quad-channel ≈ 77 GB/s; at ~3.3 GB/token (Q4)
-that's a theoretical ~23 tok/s, and we reach ~21. The only way past it is faster RAM (BIOS XMP to
-2666–2933 ≈ +10–20%) — the CPU is overclocked but the RAM is not. That's a BIOS change, out of scope
-here, but it's the one lever left.
-
-## Recommended settings
-
-**Single-stream (fastest — use this):** load `qwen3.6-35b-a3b-mtp@q4_k_xl`, apply
-`presets/qwen3.6-q4-single-stream.json` (ctx 131072, flash on, KV q8_0, MTP draft 4, threads 8,
-experts 0.70), vision projector disabled. → **~20.8 tok/s at 128k context.**
-
-```bash
-./disable_vision.sh                       # one-time; frees 1.8 GB VRAM for text use
-GGUF=unsloth/Qwen3.6-35B-A3B-MTP-GGUF/Qwen3.6-35B-A3B-UD-Q4_K_XL.gguf
-python3 apply_config.py --gguf "$GGUF" \
-  --set ctx=131072 --set flash=true --set kcache=q8_0 --set vcache=q8_0 \
-  --set mtp=true --set draft_max=4 --set threads=8 --set cpu_experts=0.70 --set kv_to_gpu=false
-lms load qwen3.6-35b-a3b-mtp@q4_k_xl --identifier bench --parallel 1 -y
-```
-
-### Optional: Q5/Q6 for quality
-
-Q4 quality is good, but Q5_K_XL / Q6_K_XL trade speed for a bit more fidelity. They are **slower**
-(more bytes/token → expect ~17–18 and ~15–16 tok/s respectively by the bandwidth ratio), so they only
-make sense if Q4 quality proves insufficient. `models.json` lists them; download was deferred (HF was
-rate-limiting the CDN). To bench when downloaded, point `sweep.sh` at the `@q5_k_xl` / `@q6_k_xl` tags.
+1. `python3 machine.py --ensure` to register the box.
+2. Find the largest quant that **fully fits** your VRAM at your target context (start there — it's
+   usually fastest). If none fit, drop to hybrid offload and tune `numCpuExpertLayersRatio`.
+3. Flash attention on; KV cache `q8_0`; MTP on with `draft_max=4`; threads = physical cores;
+   `parallel=1`.
+4. `python3 report.py` to write your machine's results page, then commit `machines/` + `results/`.
