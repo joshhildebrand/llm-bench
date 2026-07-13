@@ -17,3 +17,9 @@ timestamp,model,label,quant,ctx,parallel,gpu_ratio,flash,kv_quant,threads,mtp,mo
 1783979258,bench,q4_128k_mtp_d4_exp0.70_t6,q4_k_xl,131072,1,max,on,q8_0,6,on,decode,77,256,524.92,19.34,0.147,0.917,3
 1783979352,bench,q4_WINNER_128k_mtp_d4,q4_k_xl,131072,1,max,on,q8_0,8,on,decode,77,256,575.168,20.637,0.134,0.917,3
 1783979411,bench,q4_WINNER_128k_mtp_d4,q4_k_xl,131072,1,max,on,q8_0,8,on,prefill,11042.0,1.0,3740.719,1000000.0,2.952,None,2
+1783980923,bench,q4_FULL256k_mtp_d4,q4_k_xl,262144,1,max,on,q8_0,8,on,decode,77,256,582.398,20.919,0.132,0.917,3
+1783981084,bench,q4_256k_exp0.90_at16k,q4_k_xl,262144,1,max,on,q8_0,8,on,decode,11042,64,3392.775,13.609,3.255,0.851,1
+1783981144,bench,q4_256k_exp0.82_empty,q4_k_xl,262144,1,max,on,q8_0,8,on,decode,77.0,200.0,569.025,21.241,0.135,0.941,2
+1783981202,bench,q4_256k_exp0.82_at16k,q4_k_xl,262144,1,max,on,q8_0,8,on,decode,11042,48,200.382,14.025,55.105,0.882,1
+1783981238,bench,q4_256k_exp0.78_empty,q4_k_xl,262144,1,max,on,q8_0,8,on,decode,77.0,200.0,557.877,21.574,0.139,0.921,2
+1783981296,bench,q4_256k_exp0.78_at16k,q4_k_xl,262144,1,max,on,q8_0,8,on,decode,11042,48,203.455,13.872,54.272,0.906,1

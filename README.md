@@ -122,6 +122,23 @@ so batching users does **not** raise total throughput here — unlike a GPU-boun
 parallel=1**; only raise it if you specifically need concurrent sessions and accept proportionally
 slower each.
 
+### Full context (256k) — works, but with a catch
+
+The model's max context is 262144 (256k). It **loads and runs at ~21 tok/s** at the fast config, but
+the GPU attention/compute buffer for 256k nearly fills the 8 GB card, so a non-trivial prompt OOMs and
+**crashes the server**. Making 256k stable requires pushing more experts to CPU
+(`cpu_experts ≈ 0.78–0.82`) for VRAM headroom — which is fine for decode but **collapses prefill**:
+
+| Context | Empty decode | 16k-prompt prefill | Notes |
+|---|---:|---:|---|
+| **128k, experts 0.70** | 20.8 | **~3 s (3700 tok/s)** | stable, recommended |
+| 256k, experts 0.70 | 20.9 | **crashes (OOM)** | not usable with real prompts |
+| 256k, experts 0.82 | 21.2 | **~55 s (290 tok/s)** | stable but prefill 18× slower |
+
+So 256k is usable only if the context fills slowly via generation; for ingesting large prompts it's
+impractical on 8 GB VRAM. **128k is the sweet spot** — full speed, fast prefill, stable headroom.
+(A `cpu_experts=0.82` 256k preset works if you truly need the depth and accept slow prompt ingest.)
+
 ### The hard ceiling
 
 CPU-side decode is capped by RAM bandwidth. DDR4-2400 quad-channel ≈ 77 GB/s; at ~3.3 GB/token (Q4)
