@@ -84,14 +84,26 @@ def _decode_table(rows: list[dict]) -> str:
 def _throughput_table(rows: list[dict]) -> str:
     if not rows:
         return ""
-    head = "| agg tok/s | per-stream | quant | ctx | concurrency | label |"
-    sep = "|---:|---:|---|---:|---:|---|"
-    lines = ["", "## Concurrency / throughput", "", head, sep]
-    rows.sort(key=lambda r: (r.get("quant", ""), _num(r.get("concurrency")) or 0))
+    # Report decode tok/s (same metric as the single-stream table above) so it's
+    # apples-to-apples: total = all streams combined, per-stream = what each user sees.
+    # (total = per-stream decode rate x concurrency.)
+    lines = ["", "## Concurrency / throughput",
+             "",
+             "Both columns are **decode tok/s** — same metric as the single-stream table. "
+             "*Total* is the combined generation rate across all streams; *per stream* is what "
+             "each concurrent user experiences (at 1 stream they're equal).",
+             "",
+             "| streams | decode tok/s (total) | decode tok/s (per stream) | quant | ctx | mtp | label |",
+             "|---:|---:|---:|---|---:|---|---|"]
+    rows.sort(key=lambda r: (r.get("quant", ""), r.get("mtp", ""),
+                             _num(r.get("concurrency")) or 0))
     for r in rows:
+        per = _num(r.get("mean_stream_tok_s"))
+        conc = int(_num(r.get("concurrency")) or 1)
+        total = per * conc if per is not None else None
         lines.append(
-            f"| {_num(r['agg_tok_s']):.1f} | {_num(r['mean_stream_tok_s']):.1f} | "
-            f"{r['quant']} | {r['ctx']} | {r['concurrency']} | {r['label']} |")
+            f"| {conc} | {total:.0f} | {per:.1f} | {r['quant']} | {r['ctx']} | "
+            f"{r.get('mtp','')} | {r['label']} |")
     return "\n".join(lines) + "\n"
 
 

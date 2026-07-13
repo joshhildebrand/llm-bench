@@ -8,3 +8,7 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1783984648,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,iq4xs_tput_nomtp_dualgpu,iq4_xs,32768,4,1,max,on,q8_0,8,off,50.173,87.329,256,5.102
 1783984658,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,iq4xs_tput_nomtp_dualgpu,iq4_xs,32768,4,2,max,on,q8_0,8,off,84.082,67.711,512,6.089
 1783984670,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,iq4xs_tput_nomtp_dualgpu,iq4_xs,32768,4,4,max,on,q8_0,8,off,126.721,45.513,1024,8.081
+1783985663,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,iq4xs_tput_p8_nomtp_dualgpu,iq4_xs,32768,8,1,max,on,q8_0,8,off,50.507,87.359,256,5.069
+1783985673,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,iq4xs_tput_p8_nomtp_dualgpu,iq4_xs,32768,8,2,max,on,q8_0,8,off,84.747,68.227,512,6.042
+1783985685,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,iq4xs_tput_p8_nomtp_dualgpu,iq4_xs,32768,8,4,max,on,q8_0,8,off,126.43,45.148,1024,8.099
+1783985703,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,iq4xs_tput_p8_nomtp_dualgpu,iq4_xs,32768,8,8,max,on,q8_0,8,off,157.867,25.28,2048,12.973
