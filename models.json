@@ -13,6 +13,39 @@
       "note": "Primary target. MoE 35B total / ~3B active; ships an MTP (multi-token-prediction) head for speculative decode. Sweep quants to find the largest that fully fits your VRAM at 128k ctx."
     },
     {
+      "key": "qwen3-coder-30b-a3b-instruct",
+      "hf_repo": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+      "quants": ["q4_k_xl"],
+      "contexts": [131072],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": false,
+      "thinking": "no_think",
+      "note": "Agentic-coding MoE, 30B total / ~3B active, 256K ctx (1M via YaRN), native tool-call format. NO MTP head (Qwen3-gen, not 3.6), so no speculative speedup on this box — expect ~no-MTP decode. Non-thinking instruct model. Smaller than the 35B (17.7GB Q4) and no vision projector."
+    },
+    {
+      "key": "qwen3.5-9b",
+      "hf_repo": "unsloth/Qwen3.5-9B-GGUF",
+      "quants": ["q4_k_xl", "q6_k_xl"],
+      "contexts": [32768],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "Dense 9B, fits 8GB VRAM at Q4 (~6GB) -> fully GPU-resident. Note: dense reads ALL weights/token, so on a bandwidth-weak GPU it is not dramatically faster than the A3B MoE. Multimodal (mmproj available, disable for text)."
+    },
+    {
+      "key": "ornith-1.0-9b",
+      "hf_repo": "deepreinforce-ai/Ornith-1.0-9B-GGUF",
+      "quants": ["q4_k_m"],
+      "contexts": [32768],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "Dense 9B agentic-coding reasoning model (deepreinforce-ai), <think> by default. Q4_K_M ~5.6GB fits 8GB VRAM. An MTP GGUF variant exists (protoLabsAI) to test speculative decode on a resident 9B."
+    },
+    {
       "key": "nvidia/nemotron-3-nano-4b",
       "hf_repo": "lmstudio-community/NVIDIA-Nemotron-3-Nano-4B-GGUF",
       "quants": ["q8_0"],

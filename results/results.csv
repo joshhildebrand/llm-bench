@@ -54,3 +54,9 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1783987262,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,ornith35b_q4km_32k_conc_dualgpu,q4_k_m,32768,4,1,max,on,q8_0,8,off,decode,77.0,256.0,689.67,95.332,95.332,0.114,None,2
 1783987282,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,ornith35b_q4km_32k_conc_dualgpu,q4_k_m,32768,4,2,max,on,q8_0,8,off,decode,77.0,256.0,167.052,66.626,133.253,0.461,None,2
 1783987311,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,ornith35b_q4km_32k_conc_dualgpu,q4_k_m,32768,4,4,max,on,q8_0,8,off,decode,77.0,256.0,121.64,41.466,165.862,0.753,None,2
+1783987236,i7-5960x-1x10708g-63g-16b2,qwen3.5-9b,q35_9b_gpuresident_default,q4_k_xl,32768,1,1,max,default,default,8,off,decode,77,256,760.682,20.382,20.382,0.101,None,3
+1783987324,i7-5960x-1x10708g-63g-16b2,qwen3.5-9b,q35_9b_flash_kvq8,q4_k_xl,32768,1,1,max,on,q8_0,8,off,decode,77,256,1071.483,24.498,24.498,0.072,None,3
+1783987390,i7-5960x-1x10708g-63g-16b2,qwen3.5-9b,q35_9b_flash_kvq8,q4_k_xl,32768,1,1,max,on,q8_0,8,off,prefill,11042.0,1.0,8265.069,1000000.0,1000000.0,1.336,None,2
+1783987610,i7-5960x-1x10708g-63g-16b2,qwen3.5-9b,q35_9b_conc,q4_k_xl,32768,4,1,max,on,q8_0,8,off,decode,77.0,200.0,1063.377,24.599,24.599,0.072,None,2
+1783987642,i7-5960x-1x10708g-63g-16b2,qwen3.5-9b,q35_9b_conc,q4_k_xl,32768,4,2,max,on,q8_0,8,off,decode,77.0,200.0,765.268,18.932,37.863,0.105,None,2
+1783987698,i7-5960x-1x10708g-63g-16b2,qwen3.5-9b,q35_9b_conc,q4_k_xl,32768,4,4,max,on,q8_0,8,off,decode,77.0,200.0,439.996,11.17,44.679,0.226,None,2
