@@ -74,3 +74,14 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1783988211,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-27b-mtp,27b_dense_iq4xs_32k_conc_dualgpu,iq4_xs,32768,8,2,max,on,q8_0,8,on,decode,77.0,256.0,104.877,21.99,43.981,0.738,0.741,3
 1783988305,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-27b-mtp,27b_dense_iq4xs_32k_conc_dualgpu,iq4_xs,32768,8,4,max,on,q8_0,8,on,decode,77.0,256.0,62.29,13.083,52.331,1.242,0.737,3
 1783988470,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-27b-mtp,27b_dense_iq4xs_32k_conc_dualgpu,iq4_xs,32768,8,8,max,on,q8_0,8,on,decode,77.0,256.0,34.286,7.014,56.115,2.252,0.732,3
+1783992253,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp1.0_32k,q8_0,32768,1,1,max,on,q8_0,8,off,decode,135.0,256.0,608.108,17.298,17.298,0.222,None,3
+1783992444,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.89_32k,q8_0,32768,1,1,max,on,q8_0,8,off,decode,135.0,256.0,605.381,17.994,17.994,0.223,None,3
+1783992551,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.78_32k,q8_0,32768,1,1,max,on,q8_0,8,off,decode,135.0,256.0,1030.534,19.296,19.296,0.131,None,3
+1783992654,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.67_32k,q8_0,32768,1,1,max,on,q8_0,8,off,decode,135.0,256.0,1030.534,20.589,20.589,0.131,None,3
+1783992762,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.61_32k,q8_0,32768,1,1,max,on,q8_0,8,off,decode,135.0,256.0,1163.793,21.232,21.232,0.116,None,3
+1783993325,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.61_32k,q8_0,32768,1,1,max,on,q8_0,8,off,prefill,11108.5,1.0,None,0.0,0.0,0.0,None,2
+1783993481,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.61_32k,q8_0,32768,1,1,max,on,q8_0,8,off,prefill,11110.0,1.0,325.94,0.0,0.0,34.087,None,2
+1783993602,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.67_32k_conc,q8_0,32768,8,1,max,on,q8_0,8,off,decode,135.0,256.0,1163.793,20.507,20.507,0.116,None,3
+1783993697,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.67_32k_conc,q8_0,32768,8,2,max,on,q8_0,8,off,decode,135.0,256.0,57.965,13.874,27.748,2.329,None,3
+1783993830,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.67_32k_conc,q8_0,32768,8,4,max,on,q8_0,8,off,decode,135.0,256.0,50.785,8.958,35.832,2.658,None,3
+1783994065,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.67_32k_conc,q8_0,32768,8,8,max,on,q8_0,8,off,decode,135.0,256.0,25.448,5.03,40.242,5.305,None,3

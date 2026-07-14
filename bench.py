@@ -28,6 +28,7 @@ import statistics
 import sys
 import time
 import urllib.error
+import uuid
 import urllib.request
 
 import machine
@@ -58,6 +59,11 @@ def post(payload: dict, timeout: float) -> dict:
 
 
 def one_request(prompt: str, max_tokens: int, timeout: float) -> dict:
+    # Prefill measures prompt processing, so every request must miss the server's
+    # prompt cache. With parallel=1 all requests share one slot and an identical
+    # prompt gets ttft~0 from the cache; a unique prefix defeats that.
+    if args.mode == "prefill":
+        prompt = f"[req {uuid.uuid4().hex[:12]}]\n{prompt}"
     payload = {
         "model": args.model,
         "messages": [{"role": "user", "content": prompt}],
@@ -71,6 +77,11 @@ def one_request(prompt: str, max_tokens: int, timeout: float) -> dict:
     stats = body.get("stats", {})
     usage = body.get("usage", {})
     ttft = stats.get("time_to_first_token")
+    # Some model/server combos (e.g. gpt-oss) report ttft=0 on non-streaming
+    # requests and carry the prefill time in generation_time instead. For a
+    # 1-token prefill probe, generation_time IS the prompt-processing time.
+    if not ttft and args.mode == "prefill":
+        ttft = stats.get("generation_time")
     ptoks = usage.get("prompt_tokens", 0)
     total_draft = usage.get("total_draft_tokens_count") or 0
     accepted = usage.get("accepted_draft_tokens_count") or 0

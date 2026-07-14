@@ -46,6 +46,17 @@
       "note": "Dense 9B agentic-coding reasoning model (deepreinforce-ai), <think> by default. Q4_K_M ~5.6GB fits 8GB VRAM. An MTP GGUF variant exists (protoLabsAI) to test speculative decode on a resident 9B."
     },
     {
+      "key": "gpt-oss-120b",
+      "hf_repo": "unsloth/gpt-oss-120b-GGUF",
+      "quants": ["q8_0"],
+      "contexts": [32768],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "OpenAI gpt-oss. MoE 117B total / 5.1B active, 36 layers, 128 experts top-4. Experts are native MXFP4, so Q8_0 (63.4 GB, attention at Q8) is effectively the only quant. Does NOT fit 32 GB VRAM -> hybrid is mandatory: cpu_experts down from 1.0, keep_in_ram=false, mmap=true, flash on. DANGER: a full-GPU or big-ctx/no-flash load overflows VRAM into CUDA sysmem fallback (committed host RAM) and can hard-lock a 64 GB box. Run ramguard.ps1 during loads."
+    },
+    {
       "key": "nvidia/nemotron-3-nano-4b",
       "hf_repo": "lmstudio-community/NVIDIA-Nemotron-3-Nano-4B-GGUF",
       "quants": ["q8_0"],
