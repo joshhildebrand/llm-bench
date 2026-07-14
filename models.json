@@ -46,6 +46,17 @@
       "note": "Dense 9B agentic-coding reasoning model (deepreinforce-ai), <think> by default. Q4_K_M ~5.6GB fits 8GB VRAM. An MTP GGUF variant exists (protoLabsAI) to test speculative decode on a resident 9B."
     },
     {
+      "key": "qwen3-coder-next",
+      "hf_repo": "unsloth/Qwen3-Coder-Next-GGUF",
+      "quants": ["q2_k_xl", "q4_k_s", "q5_k_xl"],
+      "contexts": [32768],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": false,
+      "thinking": "no_think",
+      "note": "Agentic-coding MoE, ~80B total / ~3B active (512 experts, 10 used + 1 shared), 48 blocks, hybrid Gated-DeltaNet linear attention (only 2 KV heads -> tiny KV cache, 256k native ctx). UD-Q2_K_XL (26.8 GB) fits 2x16GB fully resident. GGUF has no bundled MTP head. Non-thinking instruct. DeltaNet layers cost more GPU compute per token than plain attention, so resident decode is slower than qwen3-coder-30b despite similar active params."
+    },
+    {
       "key": "gpt-oss-120b",
       "hf_repo": "unsloth/gpt-oss-120b-GGUF",
       "quants": ["q8_0"],
