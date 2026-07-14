@@ -103,3 +103,7 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1783996276,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,codernext_q2_32k_conc_dualgpu,q2_k_xl,32768,8,4,max,on,q8_0,8,off,decode,78.0,256.0,59.922,26.676,106.706,1.302,None,3
 1783996364,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,codernext_q2_32k_conc_dualgpu,q2_k_xl,32768,8,8,max,on,q8_0,8,off,decode,78.0,256.0,32.3,14.672,117.374,2.415,None,3
 1783996393,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,codernext_q2_32k_conc_dualgpu,q2_k_xl,32768,8,1,max,on,q8_0,8,off,prefill,11057.5,1.0,951.308,0.0,0.0,11.639,None,2
+1783997077,7-9800x3d-2x5060ti16g-64g-f732,devstral-small-2-24b-2512,devstral24b_q8_32k_fullgpu_dualgpu,q8_0,32768,1,1,max,on,q8_0,8,off,decode,583.0,256.0,2052.817,9.363,9.363,0.284,None,3
+1783997113,7-9800x3d-2x5060ti16g-64g-f732,devstral-small-2-24b-2512,devstral24b_q8_32k_fullgpu_dualgpu,q8_0,32768,1,1,max,on,q8_0,8,off,prefill,11806.5,1.0,799.012,0.0,0.0,14.779,None,2
+1783997755,7-9800x3d-2x5060ti16g-64g-f732,tess-4-27b,tess27b_q4ks_32k_fullgpu_dualgpu,q4_k_s,32768,1,1,max,on,q8_0,8,off,decode,77.0,256.0,301.961,21.949,21.949,0.255,None,3
+1783997778,7-9800x3d-2x5060ti16g-64g-f732,tess-4-27b,tess27b_q4ks_32k_fullgpu_dualgpu,q4_k_s,32768,1,1,max,on,q8_0,8,off,prefill,11058.5,1.0,1245.894,0.0,0.0,8.877,None,2
