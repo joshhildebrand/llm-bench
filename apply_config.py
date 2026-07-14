@@ -27,6 +27,13 @@ Usage:
   python3 apply_config.py --gguf unsloth/Qwen3.6-.../...-Q4_K_XL.gguf \
       --set cpu_experts=0.8 --set threads=8 --set draft_max=3 [--print]
 
+NOTE on hub-resolved models: entries that `lms ls` shows as "publisher/name
+(N variants)" (e.g. mistralai/devstral-small-2-2512) do NOT read the config at
+their physical gguf path — they key it as <publisher>/<model-key>.json. Pass
+--gguf "mistralai/devstral-small-2-2512" (no .gguf) for those, and verify the
+load picked it up via `lms ps` (CONTEXT column). Physical-path GGUFs
+(unsloth/..., bartowski/...) use <repo-dir>/<file>.gguf.json as documented.
+
 Writes a .bak the first time it touches a file. Use --show to dump current config.
 """
 import argparse

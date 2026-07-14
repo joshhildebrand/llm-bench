@@ -46,6 +46,28 @@
       "note": "Dense 9B agentic-coding reasoning model (deepreinforce-ai), <think> by default. Q4_K_M ~5.6GB fits 8GB VRAM. An MTP GGUF variant exists (protoLabsAI) to test speculative decode on a resident 9B."
     },
     {
+      "key": "migtissera_tess-4-27b",
+      "hf_repo": "bartowski/migtissera_Tess-4-27B-GGUF",
+      "quants": ["q4_k_s"],
+      "contexts": [32768],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "Tess-4 finetune of the Qwen3.5/3.6 dense 27B (arch qwen35), general instruct/reasoning. Q4_K_S 17.6 GB fits dual-GPU resident. bartowski GGUF has no MTP head (the finetuner publishes a separate EAGLE3 draft model instead - untested, LM Studio draft-model support permitting). Multimodal mmproj-f16 disabled for text benches."
+    },
+    {
+      "key": "mistralai/devstral-small-2-2512",
+      "hf_repo": "unsloth/Devstral-Small-2-24B-Instruct-2512-GGUF",
+      "quants": ["q8_0"],
+      "contexts": [32768],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": false,
+      "thinking": "no_think",
+      "note": "Mistral agentic coder, DENSE 24B (mistral3 arch), multimodal (disable mmproj for text benches). Dense = all 25 GB of Q8 weights read per token, split across both cards incl. the x1 link -> slow on the dual-5060Ti box (~9-11 tok/s). Q4_K_M (~14 GB) would fit a single 16 GB card and avoid the x1 hop entirely - likely the right quant there. HUB-KEYED MODEL: apply_config needs --gguf 'mistralai/devstral-small-2-2512' (see apply_config.py docstring)."
+    },
+    {
       "key": "qwen3-coder-next",
       "hf_repo": "unsloth/Qwen3-Coder-Next-GGUF",
       "quants": ["q2_k_xl", "q4_k_s", "q5_k_xl"],
