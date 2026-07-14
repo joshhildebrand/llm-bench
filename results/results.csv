@@ -92,3 +92,8 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1783993697,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.67_32k_conc,q8_0,32768,8,2,max,on,q8_0,8,off,decode,135.0,256.0,57.965,13.874,27.748,2.329,None,3
 1783993830,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.67_32k_conc,q8_0,32768,8,4,max,on,q8_0,8,off,decode,135.0,256.0,50.785,8.958,35.832,2.658,None,3
 1783994065,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-120b,oss120b_hybrid_exp0.67_32k_conc,q8_0,32768,8,8,max,on,q8_0,8,off,decode,135.0,256.0,25.448,5.03,40.242,5.305,None,3
+1783994746,7-9800x3d-2x5060ti16g-64g-f732,nemotron-3-super-120b-a12b,nemo120b_hybrid_exp1.0_32k,ud_q2_k_xl,32768,1,1,max,on,q8_0,8,off,decode,86.0,256.0,145.27,7.998,7.998,0.592,None,3
+1783994934,7-9800x3d-2x5060ti16g-64g-f732,nemotron-3-super-120b-a12b,nemo120b_hybrid_exp0.85_32k_mtpoff,ud_q2_k_xl,32768,1,1,max,on,q8_0,8,off,decode,86.0,256.0,165.703,8.244,8.244,0.519,None,3
+1783995091,7-9800x3d-2x5060ti16g-64g-f732,nemotron-3-super-120b-a12b,nemo120b_hybrid_exp0.70_32k_mtpoff,ud_q2_k_xl,32768,1,1,max,on,q8_0,8,off,decode,86.0,256.0,219.388,8.692,8.692,0.392,None,3
+1783995240,7-9800x3d-2x5060ti16g-64g-f732,nemotron-3-super-120b-a12b,nemo120b_hybrid_exp0.57_32k_mtpoff,ud_q2_k_xl,32768,1,1,max,on,q8_0,8,off,decode,86.0,256.0,246.418,9.291,9.291,0.349,None,3
+1783995411,7-9800x3d-2x5060ti16g-64g-f732,nemotron-3-super-120b-a12b,nemo120b_hybrid_exp0.57_32k_mtpoff,ud_q2_k_xl,32768,1,1,max,on,q8_0,8,off,prefill,11309.5,1.0,234.536,0.0,0.0,48.267,None,2
