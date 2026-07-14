@@ -97,3 +97,9 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1783995091,7-9800x3d-2x5060ti16g-64g-f732,nemotron-3-super-120b-a12b,nemo120b_hybrid_exp0.70_32k_mtpoff,ud_q2_k_xl,32768,1,1,max,on,q8_0,8,off,decode,86.0,256.0,219.388,8.692,8.692,0.392,None,3
 1783995240,7-9800x3d-2x5060ti16g-64g-f732,nemotron-3-super-120b-a12b,nemo120b_hybrid_exp0.57_32k_mtpoff,ud_q2_k_xl,32768,1,1,max,on,q8_0,8,off,decode,86.0,256.0,246.418,9.291,9.291,0.349,None,3
 1783995411,7-9800x3d-2x5060ti16g-64g-f732,nemotron-3-super-120b-a12b,nemo120b_hybrid_exp0.57_32k_mtpoff,ud_q2_k_xl,32768,1,1,max,on,q8_0,8,off,prefill,11309.5,1.0,234.536,0.0,0.0,48.267,None,2
+1783996108,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,codernext_q2_32k_fullgpu_dualgpu,q2_k_xl,32768,1,1,max,on,q8_0,8,off,decode,78.0,256.0,672.414,59.137,59.137,0.116,None,3
+1783996188,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,codernext_q2_32k_conc_dualgpu,q2_k_xl,32768,8,1,max,on,q8_0,8,off,decode,78.0,256.0,672.414,59.344,59.344,0.116,None,3
+1783996224,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,codernext_q2_32k_conc_dualgpu,q2_k_xl,32768,8,2,max,on,q8_0,8,off,decode,78.0,256.0,100.334,43.769,87.539,0.778,None,3
+1783996276,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,codernext_q2_32k_conc_dualgpu,q2_k_xl,32768,8,4,max,on,q8_0,8,off,decode,78.0,256.0,59.922,26.676,106.706,1.302,None,3
+1783996364,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,codernext_q2_32k_conc_dualgpu,q2_k_xl,32768,8,8,max,on,q8_0,8,off,decode,78.0,256.0,32.3,14.672,117.374,2.415,None,3
+1783996393,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,codernext_q2_32k_conc_dualgpu,q2_k_xl,32768,8,1,max,on,q8_0,8,off,prefill,11057.5,1.0,951.308,0.0,0.0,11.639,None,2
