@@ -81,3 +81,4 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1783988376,i7-5960x-1x10708g-63g-16b2,qwen3-coder-30b-a3b-instruct,coder30b_conc,q4_k_xl,32768,4,2,max,on,q8_0,8,off,decode,75.0,200.0,1382.28,15.676,31.352,0.055,None,2
 1783988442,i7-5960x-1x10708g-63g-16b2,qwen3-coder-30b-a3b-instruct,coder30b_conc,q4_k_xl,32768,4,4,max,on,q8_0,8,off,decode,75.0,200.0,824.276,9.153,36.612,0.091,None,2
 1783988506,i7-5960x-1x10708g-63g-16b2,qwen3-coder-30b-a3b-instruct,coder30b_conc,q4_k_xl,32768,4,1,max,on,q8_0,8,off,prefill,11040.0,1.0,50404.948,1000000.0,1000000.0,0.219,None,2
+1783988705,i7-5960x-1x10708g-63g-16b2,ornith-1.0-9b-mtp,ornith9b_MTP_d4,q4_k_m,32768,1,1,max,on,q8_0,8,on,decode,77.0,256.0,1080.884,29.921,29.921,0.071,0.843,3
