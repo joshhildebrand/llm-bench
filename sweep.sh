@@ -27,8 +27,12 @@ ID="bench"                       # stable API identifier across quants
 OUT="results/results.csv"
 HOST="${LMS_HOST:-http://localhost:1234}"
 RUNS="${RUNS:-3}"; WARMUP="${WARMUP:-1}"; MAXTOK="${MAXTOK:-256}"
-PARALLEL="${PARALLEL:-1}"        # KV slots to load with (>= max CONC)
-CONC="${CONC:-1}"                # space-separated concurrency levels, e.g. "1 2 4 8"
+CONC="${CONC:-1 2 4 8}"          # concurrency levels tested per config (space-separated)
+# Load with enough KV slots for the largest concurrency, unless PARALLEL is set.
+# NOTE: KV scales with parallel*context; at high concurrency use a smaller ctx so
+# the KV still fits VRAM (single-stream can use full context, the ladder a serving one).
+_maxc=1; for _c in $CONC; do [ "$_c" -gt "$_maxc" ] && _maxc="$_c"; done
+PARALLEL="${PARALLEL:-$_maxc}"
 PREFILL="${PREFILL:-1}"          # also run 16k prefill per config (0 to skip)
 
 # Advanced-param matrix. One row = one benchmarked config.
