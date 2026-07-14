@@ -21,7 +21,6 @@ import machine
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RESULTS = os.path.join(HERE, "results", "results.csv")
-THROUGHPUT = os.path.join(HERE, "results", "throughput.csv")
 REGISTRY_DIR = os.path.join(HERE, "machines")
 
 
@@ -64,52 +63,49 @@ def _specs_block(mid: str) -> str:
 
 def _decode_table(rows: list[dict]) -> str:
     dec = [r for r in rows if r.get("mode") == "decode" and _num(r.get("tg_tok_s"))]
-    dec.sort(key=lambda r: _num(r["tg_tok_s"]), reverse=True)
     if not dec:
         return "_No decode runs recorded._\n"
-    head = ("| tg tok/s | quant | ctx | par | mtp | flash | kv | threads | "
-            "accept | label |")
-    sep = "|---:|---|---:|---:|---|---|---|---:|---:|---|"
+    # Group by model, then quant, then streams — every row is self-describing.
+    # Both tok/s columns are decode; agg = per-stream x streams (equal at 1 stream).
+    dec.sort(key=lambda r: (r.get("model", ""), r.get("quant", ""),
+                            _num(r.get("concurrency")) or 1))
+    head = ("| model | quant | ctx | streams | decode/stream tok/s | "
+            "decode agg tok/s | mtp | accept | label |")
+    sep = "|---|---|---:|---:|---:|---:|---|---:|---|"
     lines = [head, sep]
     for r in dec:
         acc = r.get("accept_rate")
         acc = f"{float(acc):.2f}" if _num(acc) else "—"
+        conc = int(_num(r.get("concurrency")) or 1)
+        per = _num(r.get("tg_tok_s"))
+        agg = _num(r.get("tg_tok_s_agg")) or (per * conc if per else None)
         lines.append(
-            f"| **{_num(r['tg_tok_s']):.1f}** | {r['quant']} | {r['ctx']} | "
-            f"{r['parallel']} | {r['mtp']} | {r['flash']} | {r['kv_quant']} | "
-            f"{r['threads']} | {acc} | {r['label']} |")
+            f"| {r.get('model','')} | {r['quant']} | {r['ctx']} | {conc} | "
+            f"{per:.1f} | {agg:.0f} | {r['mtp']} | {acc} | {r['label']} |")
     return "\n".join(lines) + "\n"
 
 
-def _throughput_table(rows: list[dict]) -> str:
-    if not rows:
+def _prefill_table(rows: list[dict]) -> str:
+    pf = [r for r in rows if r.get("mode") == "prefill" and _num(r.get("pp_tok_s"))]
+    if not pf:
         return ""
-    # Report decode tok/s (same metric as the single-stream table above) so it's
-    # apples-to-apples: total = all streams combined, per-stream = what each user sees.
-    # (total = per-stream decode rate x concurrency.)
-    lines = ["", "## Concurrency / throughput",
-             "",
-             "Both columns are **decode tok/s** — same metric as the single-stream table. "
-             "*Total* is the combined generation rate across all streams; *per stream* is what "
-             "each concurrent user experiences (at 1 stream they're equal).",
-             "",
-             "| streams | decode tok/s (total) | decode tok/s (per stream) | quant | ctx | mtp | label |",
-             "|---:|---:|---:|---|---:|---|---|"]
-    rows.sort(key=lambda r: (r.get("quant", ""), r.get("mtp", ""),
-                             _num(r.get("concurrency")) or 0))
-    for r in rows:
-        per = _num(r.get("mean_stream_tok_s"))
-        conc = int(_num(r.get("concurrency")) or 1)
-        total = per * conc if per is not None else None
+    pf.sort(key=lambda r: (r.get("model", ""), r.get("quant", "")))
+    lines = ["", "## Prefill (prompt ingest)", "",
+             "| model | quant | ctx | pp tok/s | ttft s | label |",
+             "|---|---|---:|---:|---:|---|"]
+    for r in pf:
+        ttft = _num(r.get("ttft_s"))
         lines.append(
-            f"| {conc} | {total:.0f} | {per:.1f} | {r['quant']} | {r['ctx']} | "
-            f"{r.get('mtp','')} | {r['label']} |")
+            f"| {r.get('model','')} | {r['quant']} | {r['ctx']} | "
+            f"{_num(r['pp_tok_s']):.0f} | {ttft:.2f} | {r['label']} |"
+            if ttft is not None else
+            f"| {r.get('model','')} | {r['quant']} | {r['ctx']} | "
+            f"{_num(r['pp_tok_s']):.0f} | — | {r['label']} |")
     return "\n".join(lines) + "\n"
 
 
 def build_page(mid: str) -> str:
     dec_rows = [r for r in _read_csv(RESULTS) if r.get("machine_id") == mid]
-    tput_rows = [r for r in _read_csv(THROUGHPUT) if r.get("machine_id") == mid]
     parts = [
         f"# Results — `{mid}`",
         "",
@@ -120,13 +116,17 @@ def build_page(mid: str) -> str:
         "## Machine",
         "",
         _specs_block(mid),
-        "## Single-stream decode (sorted fastest first)",
+        "## Decode",
+        "",
+        "All tok/s are **decode** (generation) rate. `streams` = concurrent requests "
+        "(1 = single-stream); *decode/stream* is what one user sees, *decode agg* is the "
+        "combined rate across all streams (equal at 1 stream).",
         "",
         _decode_table(dec_rows),
     ]
-    tput = _throughput_table(tput_rows)
-    if tput:
-        parts.append(tput)
+    prefill = _prefill_table(dec_rows)
+    if prefill:
+        parts.append(prefill)
     # Hand-written analysis in machines/<id>.notes.md survives regeneration and is
     # appended verbatim — so a machine can keep authored prose alongside auto tables.
     notes = os.path.join(REGISTRY_DIR, mid + ".notes.md")

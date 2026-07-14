@@ -27,7 +27,8 @@ ID="bench"                       # stable API identifier across quants
 OUT="results/results.csv"
 HOST="${LMS_HOST:-http://localhost:1234}"
 RUNS="${RUNS:-3}"; WARMUP="${WARMUP:-1}"; MAXTOK="${MAXTOK:-256}"
-PARALLEL="${PARALLEL:-1}"        # single-stream by default
+PARALLEL="${PARALLEL:-1}"        # KV slots to load with (>= max CONC)
+CONC="${CONC:-1}"                # space-separated concurrency levels, e.g. "1 2 4 8"
 PREFILL="${PREFILL:-1}"          # also run 16k prefill per config (0 to skip)
 
 # Advanced-param matrix. One row = one benchmarked config.
@@ -72,7 +73,12 @@ run_config() {
     --flash on --kv-quant "$kc" --threads "$threads"
     --label "$label" --runs "$RUNS" --warmup "$WARMUP")
 
-  python3 bench.py "${common[@]}" --mode decode --prompt prompts/decode.txt --max-tokens "$MAXTOK" --out "$OUT"
+  # Decode at each requested concurrency (CONC space-separated; 1=single-stream).
+  # The load's --parallel must be >= the largest concurrency, or extra streams queue.
+  for c in $CONC; do
+    python3 bench.py "${common[@]}" --mode decode --prompt prompts/decode.txt \
+      --max-tokens "$MAXTOK" --concurrency "$c" --out "$OUT"
+  done
   [ "$PREFILL" = "1" ] && python3 bench.py "${common[@]}" --mode prefill --prompt prompts/prefill_16k.txt --out "$OUT"
 }
 

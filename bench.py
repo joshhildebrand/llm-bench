@@ -21,6 +21,7 @@ Example:
       --out results/results.csv
 """
 import argparse
+import concurrent.futures as cf
 import json
 import os
 import statistics
@@ -34,10 +35,16 @@ import machine
 HOST = os.environ.get("LMS_HOST", "http://localhost:1234")
 ENDPOINT = HOST + "/api/v0/chat/completions"
 
+# One unified schema. Concurrency is first-class: every row records how many
+# streams ran (1 = single-stream), the per-stream decode rate (tg_tok_s), and the
+# aggregate decode rate across all streams (tg_tok_s_agg = tg_tok_s x concurrency).
+# For a single stream the two decode columns are equal. Both are decode tok/s, so
+# single-stream and concurrent rows are directly comparable.
 CSV_COLUMNS = [
     "timestamp", "machine_id", "model", "label", "quant", "ctx", "parallel",
-    "gpu_ratio", "flash", "kv_quant", "threads", "mtp", "mode", "prompt_tokens",
-    "completion_tokens", "pp_tok_s", "tg_tok_s", "ttft_s", "accept_rate", "runs",
+    "concurrency", "gpu_ratio", "flash", "kv_quant", "threads", "mtp", "mode",
+    "prompt_tokens", "completion_tokens", "pp_tok_s", "tg_tok_s", "tg_tok_s_agg",
+    "ttft_s", "accept_rate", "runs",
 ]
 
 
@@ -77,6 +84,21 @@ def one_request(prompt: str, max_tokens: int, timeout: float) -> dict:
     }
 
 
+def run_batch(prompt: str, max_tokens: int, timeout: float, concurrency: int) -> list:
+    """Fire `concurrency` requests at once; return the per-stream result dicts."""
+    if concurrency <= 1:
+        return [one_request(prompt, max_tokens, timeout)]
+    with cf.ThreadPoolExecutor(max_workers=concurrency) as ex:
+        futs = [ex.submit(one_request, prompt, max_tokens, timeout)
+                for _ in range(concurrency)]
+        return [f.result() for f in futs]
+
+
+def mean(vals):
+    vals = [v for v in vals if v is not None]
+    return sum(vals) / len(vals) if vals else None
+
+
 def median(vals):
     vals = [v for v in vals if v is not None]
     return round(statistics.median(vals), 3) if vals else None
@@ -89,29 +111,42 @@ def main() -> int:
         prompt = prompt.rstrip() + "\n/no_think"
 
     max_tokens = 1 if args.mode == "prefill" else args.max_tokens
-    print(f"[bench] {args.model} mode={args.mode} prompt={os.path.basename(args.prompt)} "
-          f"max_tokens={max_tokens} warmup={args.warmup} runs={args.runs}", file=sys.stderr)
+    conc = 1 if args.mode == "prefill" else max(1, args.concurrency)
+    print(f"[bench] {args.model} mode={args.mode} concurrency={conc} "
+          f"prompt={os.path.basename(args.prompt)} max_tokens={max_tokens} "
+          f"warmup={args.warmup} runs={args.runs}", file=sys.stderr)
 
     for i in range(args.warmup):
         try:
-            one_request(prompt, max_tokens, args.timeout)
+            run_batch(prompt, max_tokens, args.timeout, conc)
             print(f"[bench]   warmup {i+1}/{args.warmup} done", file=sys.stderr)
         except (urllib.error.URLError, TimeoutError) as e:
             print(f"[bench] ERROR during warmup: {e}", file=sys.stderr)
             return 1
 
-    samples = []
+    # Each run fires `conc` concurrent streams; we track the per-stream decode
+    # rate (mean across streams) and the aggregate (per-stream x conc).
+    per_run, agg_run, ttft_run, acc_run, ptok_run, ctok_run, pp_run = ([] for _ in range(7))
     for i in range(args.runs):
         try:
-            r = one_request(prompt, max_tokens, args.timeout)
+            streams = run_batch(prompt, max_tokens, args.timeout, conc)
         except (urllib.error.URLError, TimeoutError) as e:
             print(f"[bench] ERROR during run {i+1}: {e}", file=sys.stderr)
             return 1
-        samples.append(r)
-        primary = r["pp_tok_s"] if args.mode == "prefill" else r["tg_tok_s"]
-        print(f"[bench]   run {i+1}/{args.runs}: "
-              f"{'pp' if args.mode=='prefill' else 'tg'}={primary} tok/s "
-              f"ttft={r['ttft_s']}s accept={r['accept_rate']}", file=sys.stderr)
+        per = mean([s["tg_tok_s"] for s in streams])
+        agg = (per * conc) if per is not None else None
+        per_run.append(per); agg_run.append(agg)
+        ttft_run.append(mean([s["ttft_s"] for s in streams]))
+        acc_run.append(mean([s["accept_rate"] for s in streams]))
+        ptok_run.append(mean([s["prompt_tokens"] for s in streams]))
+        ctok_run.append(mean([s["completion_tokens"] for s in streams]))
+        pp_run.append(mean([s["pp_tok_s"] for s in streams]))
+        if args.mode == "prefill":
+            print(f"[bench]   run {i+1}/{args.runs}: pp={pp_run[-1]} tok/s "
+                  f"ttft={ttft_run[-1]}s", file=sys.stderr)
+        else:
+            print(f"[bench]   run {i+1}/{args.runs}: {conc} stream(s) "
+                  f"per-stream={per} agg={agg} tok/s accept={acc_run[-1]}", file=sys.stderr)
 
     row = {
         "timestamp": int(time.time()),
@@ -121,18 +156,20 @@ def main() -> int:
         "quant": args.quant,
         "ctx": args.ctx,
         "parallel": args.parallel,
+        "concurrency": conc,
         "gpu_ratio": args.gpu,
         "flash": args.flash,
         "kv_quant": args.kv_quant,
         "threads": args.threads,
         "mtp": args.mtp,
         "mode": args.mode,
-        "prompt_tokens": median([s["prompt_tokens"] for s in samples]),
-        "completion_tokens": median([s["completion_tokens"] for s in samples]),
-        "pp_tok_s": median([s["pp_tok_s"] for s in samples]),
-        "tg_tok_s": median([s["tg_tok_s"] for s in samples]),
-        "ttft_s": median([s["ttft_s"] for s in samples]),
-        "accept_rate": median([s["accept_rate"] for s in samples]),
+        "prompt_tokens": median(ptok_run),
+        "completion_tokens": median(ctok_run),
+        "pp_tok_s": median(pp_run),
+        "tg_tok_s": median(per_run),
+        "tg_tok_s_agg": median(agg_run),
+        "ttft_s": median(ttft_run),
+        "accept_rate": median(acc_run),
         "runs": args.runs,
     }
 
@@ -143,9 +180,13 @@ def main() -> int:
             f.write(",".join(CSV_COLUMNS) + "\n")
         f.write(",".join(str(row[c]) for c in CSV_COLUMNS) + "\n")
 
-    metric = "pp_tok_s" if args.mode == "prefill" else "tg_tok_s"
-    print(f"[bench] MEDIAN {metric} = {row[metric]} tok/s  (ttft {row['ttft_s']}s, "
-          f"accept {row['accept_rate']})  -> {args.out}", file=sys.stderr)
+    if args.mode == "prefill":
+        print(f"[bench] MEDIAN pp_tok_s = {row['pp_tok_s']} tok/s  (ttft {row['ttft_s']}s)"
+              f"  -> {args.out}", file=sys.stderr)
+    else:
+        print(f"[bench] MEDIAN decode = {row['tg_tok_s']} tok/s per stream, "
+              f"{row['tg_tok_s_agg']} tok/s aggregate across {conc} stream(s)  "
+              f"(accept {row['accept_rate']})  -> {args.out}", file=sys.stderr)
     return 0
 
 
@@ -159,6 +200,9 @@ if __name__ == "__main__":
     p.add_argument("--mode", choices=["decode", "prefill"], default="decode")
     p.add_argument("--prompt", required=True)
     p.add_argument("--max-tokens", type=int, default=256, dest="max_tokens")
+    p.add_argument("--concurrency", type=int, default=1,
+                   help="simultaneous streams per run (1=single-stream; decode only). "
+                        "The loaded model must have --parallel >= this.")
     p.add_argument("--runs", type=int, default=3)
     p.add_argument("--warmup", type=int, default=1)
     p.add_argument("--timeout", type=float, default=600.0)

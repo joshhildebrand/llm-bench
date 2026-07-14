@@ -32,6 +32,12 @@ acceptance). No OpenAI/LM Studio SDK needed — stdlib `urllib` only.
 - **prefill** mode → `pp_tok_s = prompt_tokens / time_to_first_token` over a large fixed prompt
   (`prompts/prefill_16k.txt`). Measures prompt-processing throughput.
 
+**Concurrency is first-class.** `bench.py --concurrency N` fires N simultaneous streams and records,
+on one row: `concurrency`, the per-stream decode rate (`tg_tok_s`), and the aggregate decode rate
+across all streams (`tg_tok_s_agg = tg_tok_s × concurrency`). Single-stream is just `concurrency=1`
+(the two decode columns are then equal), so single- and multi-stream results are directly comparable
+in one table — no separate throughput file.
+
 Each measurement runs `--warmup` discarded requests then `--runs` measured, reporting the **median**.
 Every run appends a row to `results/results.csv` tagged with the full config **and the machine id**.
 
@@ -39,9 +45,8 @@ Every run appends a row to `results/results.csv` tagged with the full config **a
 
 | File | Purpose |
 |---|---|
-| `bench.py` | Single-stream decode/prefill benchmark → `results/results.csv` |
-| `bench_parallel.py` | Concurrent throughput benchmark → `results/throughput.csv` |
-| `sweep.sh` | Driver: loops configs, `lms load`/`unload`, calls the benchmarks |
+| `bench.py` | decode/prefill benchmark, any concurrency → `results/results.csv` |
+| `sweep.sh` | Driver: loops configs (and concurrency), `lms load`/`unload`, calls `bench.py` |
 | `apply_config.py` | Writes advanced load params LM Studio doesn't expose via `lms load` |
 | `machine.py` | Detects hardware specs, mints/records this machine's id (see below) |
 | `report.py` | Builds a machine's results page `machines/<id>.md` from the CSV |
@@ -68,16 +73,20 @@ serials — so the pages are safe to publish. See [`machines/README.md`](machine
 ## Usage
 
 ```bash
-# One measurement against an already-loaded model:
+# One measurement against an already-loaded model (single stream):
 python3 bench.py --model <identifier> --mode decode \
     --prompt prompts/decode.txt --max-tokens 256 --runs 3 --warmup 1 \
     --quant q4_k_xl --ctx 131072 --parallel 1 --gpu max --mtp on
 
+# Concurrency: N simultaneous streams (load the model with --parallel >= N):
+python3 bench.py --model <identifier> --mode decode --concurrency 4 \
+    --prompt prompts/decode.txt --quant q4_k_xl --ctx 32768 --parallel 4
+
 # Full config sweep (unloads/loads per row in sweep.sh CONFIGS):
 ./sweep.sh <model-key> <quant-tag> <gguf-rel-path>
 
-# Add throughput passes:
-THROUGHPUT=1 ./sweep.sh <model-key> <quant-tag> <gguf-rel-path>
+# Sweep across concurrency levels too (load must allow it: PARALLEL >= max CONC):
+CONC="1 2 4 8" PARALLEL=8 ./sweep.sh <model-key> <quant-tag> <gguf-rel-path>
 ```
 
 On Windows, run `sweep.sh` from Git Bash (the `lms` CLI, `curl`, and `python3` are all on PATH);
