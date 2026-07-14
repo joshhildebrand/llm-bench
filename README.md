@@ -49,6 +49,7 @@ Every run appends a row to `results/results.csv` tagged with the full config **a
 | `sweep.sh` | Driver: loops configs (and concurrency), `lms load`/`unload`, calls `bench.py` |
 | `apply_config.py` | Writes advanced load params LM Studio doesn't expose via `lms load` |
 | `machine.py` | Detects hardware specs, mints/records this machine's id (see below) |
+| `ramguard.ps1` | Watchdog for risky (near-RAM-size) loads: auto-unloads on low commit headroom |
 | `report.py` | Builds a machine's results page `machines/<id>.md` from the CSV |
 | `models.json` | Model matrix (add a block to benchmark a new model) |
 | `machines/` | One `<id>.json` (specs) + `<id>.md` (results) per contributing machine |

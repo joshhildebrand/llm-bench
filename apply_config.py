@@ -20,6 +20,8 @@ Supported short keys -> full LM Studio keys:
   kcache        -> llm.load.llama.kCacheQuantizationType           (str: f16|q8_0|q4_0 or "off")
   vcache        -> llm.load.llama.vCacheQuantizationType           (str: f16|q8_0|q4_0 or "off")
   pbatch        -> llm.load.llama.physicalBatchSize                (int)
+  keep_in_ram   -> llm.load.llama.keepModelInMemory                (bool; false = don't mlock weights)
+  mmap          -> llm.load.llama.tryMmap                          (bool; true = page cache, reclaimable)
 
 Usage:
   python3 apply_config.py --gguf unsloth/Qwen3.6-.../...-Q4_K_XL.gguf \
@@ -50,6 +52,8 @@ KEYMAP = {
     "kcache": ("llm.load.llama.kCacheQuantizationType", "str", True),
     "vcache": ("llm.load.llama.vCacheQuantizationType", "str", True),
     "pbatch": ("llm.load.llama.physicalBatchSize", "int", False),
+    "keep_in_ram": ("llm.load.llama.keepModelInMemory", "bool", False),
+    "mmap": ("llm.load.llama.tryMmap", "bool", False),
 }
 
 
