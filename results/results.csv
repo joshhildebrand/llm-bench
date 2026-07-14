@@ -65,3 +65,7 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1783987744,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_32k_conc_dualgpu,iq4_xs,32768,8,2,max,on,q8_0,8,off,decode,75.0,256.0,107.235,94.148,188.296,0.7,None,3
 1783987774,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_32k_conc_dualgpu,iq4_xs,32768,8,4,max,on,q8_0,8,off,decode,75.0,256.0,70.557,63.85,255.399,1.063,None,3
 1783987818,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_32k_conc_dualgpu,iq4_xs,32768,8,8,max,on,q8_0,8,off,decode,75.0,256.0,27.745,38.511,308.087,2.703,None,3
+1783987887,i7-5960x-1x10708g-63g-16b2,ornith-1.0-9b,ornith9b_conc,q4_k_m,32768,4,1,max,on,q8_0,8,off,decode,77.0,200.0,1129.938,25.414,25.414,0.068,None,2
+1783987918,i7-5960x-1x10708g-63g-16b2,ornith-1.0-9b,ornith9b_conc,q4_k_m,32768,4,2,max,on,q8_0,8,off,decode,77.0,200.0,653.003,19.737,39.474,0.118,None,2
+1783987970,i7-5960x-1x10708g-63g-16b2,ornith-1.0-9b,ornith9b_conc,q4_k_m,32768,4,4,max,on,q8_0,8,off,decode,77.0,200.0,675.01,11.919,47.674,0.114,None,2
+1783988022,i7-5960x-1x10708g-63g-16b2,ornith-1.0-9b,ornith9b_conc,q4_k_m,32768,4,1,max,on,q8_0,8,off,prefill,11042.0,1.0,8265.676,1000000.0,1000000.0,1.336,None,2
