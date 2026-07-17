@@ -127,6 +127,14 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1784001751,7-9800x3d-1x5060ti16g-64g-2809,qwen3-coder-30b-a3b-instruct,coder30b_iq4_1gpu_exp0.40_32k_conc,iq4_xs,32768,8,2,max,on,q8_0,8,off,decode,78.0,256.0,111.599,35.321,70.642,0.699,None,3
 1784001808,7-9800x3d-1x5060ti16g-64g-2809,qwen3-coder-30b-a3b-instruct,coder30b_iq4_1gpu_exp0.40_32k_conc,iq4_xs,32768,8,4,max,on,q8_0,8,off,decode,78.0,256.0,71.184,23.454,93.815,1.096,None,3
 1784001897,7-9800x3d-1x5060ti16g-64g-2809,qwen3-coder-30b-a3b-instruct,coder30b_iq4_1gpu_exp0.40_32k_conc,iq4_xs,32768,8,8,max,on,q8_0,8,off,decode,78.0,256.0,37.946,14.113,112.908,2.056,None,3
+1784260226,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_128k_fullgpu_dualgpu_regain,iq4_xs,131072,1,1,max,on,q8_0,8,off,decode,78.0,256.0,1591.837,117.946,117.946,0.049,None,3
+1784260244,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_128k_fullgpu_dualgpu_regain,iq4_xs,131072,1,1,max,on,q8_0,8,off,prefill,11056.0,1.0,3506.104,0.0,0.0,3.154,None,2
+1784260979,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_192k_fullgpu_dualgpu,iq4_xs,196608,1,1,max,on,q8_0,8,off,decode,78.0,256.0,1529.412,88.603,88.603,0.051,None,3
+1784260997,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_192k_fullgpu_dualgpu,iq4_xs,196608,1,1,max,on,q8_0,8,off,prefill,11059.0,1.0,3296.927,0.0,0.0,3.354,None,2
+1784261039,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_160k_fullgpu_dualgpu,iq4_xs,163840,1,1,max,on,q8_0,8,off,decode,78.0,256.0,1560.0,117.837,117.837,0.05,None,3
+1784261056,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_160k_fullgpu_dualgpu,iq4_xs,163840,1,1,max,on,q8_0,8,off,prefill,11059.5,1.0,3575.693,0.0,0.0,3.093,None,2
+1784261097,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_176k_fullgpu_dualgpu,iq4_xs,180224,1,1,max,on,q8_0,8,off,decode,78.0,256.0,1471.698,122.302,122.302,0.053,None,3
+1784261114,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,coder30b_iq4xs_176k_fullgpu_dualgpu,iq4_xs,180224,1,1,max,on,q8_0,8,off,prefill,11059.0,1.0,3539.454,0.0,0.0,3.125,None,2
 1784005972,i7-5960x-2x5060ti16g-63g-ab17,qwen3.6-35b-a3b-mtp,iq4xs_128k_p1_mtp_fullgpu_dualgpu,iq4_xs,131072,1,1,max,on,q8_0,8,on,decode,77.0,256.0,2168.77,77.781,77.781,0.036,0.86,3
 1784006058,i7-5960x-2x5060ti16g-63g-ab17,qwen3.6-35b-a3b-mtp,q4kxl_128k_p1_mtp_fullgpu_dualgpu,q4_k_xl,131072,1,1,max,on,q8_0,8,on,decode,77.0,256.0,1937.546,78.596,78.596,0.04,0.933,3
 1784006072,i7-5960x-2x5060ti16g-63g-ab17,qwen3.6-35b-a3b-mtp,q4kxl_128k_p1_mtp_fullgpu_confirm_dualgpu,q4_k_xl,131072,1,1,max,on,q8_0,8,on,decode,77.0,256.0,1875.076,77.216,77.216,0.041,0.933,3
