@@ -201,3 +201,11 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1784338785,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_deep96k_iq4xs_256k,iq4_xs,262144,1,1,max,on,q8_0,8,off,prefill,66143.5,1.0,2761.964,0.0,0.0,23.948,None,2
 1784338898,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_deep96k_q4km_256k,q4_k_m,262144,1,1,max,on,q8_0,8,off,prefill,66145.0,1.0,2605.366,0.0,0.0,25.388,None,2
 1784339082,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_deep96k_q5km_256k,q5_k_m,262144,1,1,max,on,q8_0,8,off,prefill,66143.5,1.0,1288.882,0.0,0.0,51.319,None,2
+1784340457,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx1M_kv4_iq4xs_par4,iq4_xs,1048576,4,1,max,on,q4_0,8,off,decode,77.0,256.0,316.302,27.55,27.55,0.245,None,2
+1784340584,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx1M_kv4_iq4xs_par4,iq4_xs,1048576,4,4,max,on,q4_0,8,off,decode,77.0,256.0,52.539,6.59,26.36,1.469,None,2
+1784340694,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx1M_kv4_iq4xs_par4_deep96k,iq4_xs,1048576,4,1,max,on,q4_0,8,off,prefill,66144.5,1.0,1949.367,0.0,0.0,33.931,None,2
+1784340753,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx512k_kv4_q4km_par2,q4_k_m,524288,2,1,max,on,q4_0,8,off,decode,77.0,256.0,689.011,95.904,95.904,0.114,None,2
+1784340773,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx512k_kv4_q4km_par2,q4_k_m,524288,2,2,max,on,q4_0,8,off,decode,77.0,256.0,168.328,69.903,139.805,0.459,None,2
+1784340819,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx768k_kv4_iq4xs_par3,iq4_xs,786432,3,1,max,on,q4_0,8,off,decode,77.0,256.0,682.782,98.934,98.934,0.115,None,2
+1784340840,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx768k_kv4_iq4xs_par3,iq4_xs,786432,3,3,max,on,q4_0,8,off,decode,77.0,256.0,136.222,61.588,184.764,0.566,None,2
+1784340922,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx768k_kv4_iq4xs_par3_deep96k,iq4_xs,786432,3,1,max,on,q4_0,8,off,prefill,66144.0,1.0,2678.6,0.0,0.0,24.694,None,2
