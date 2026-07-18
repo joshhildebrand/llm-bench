@@ -35,6 +35,17 @@
       "note": "Dense 9B, fits 8GB VRAM at Q4 (~6GB) -> fully GPU-resident. Note: dense reads ALL weights/token, so on a bandwidth-weak GPU it is not dramatically faster than the A3B MoE. Multimodal (mmproj available, disable for text)."
     },
     {
+      "key": "ornith-1.0-35b",
+      "hf_repo": "deepreinforce-ai/Ornith-1.0-35B-GGUF",
+      "quants": ["q4_k_m", "q5_k_m", "q6_k"],
+      "contexts": [131072, 262144],
+      "parallel": [1],
+      "gpu": ["max"],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "MoE agentic-coding reasoning model (qwen35moe arch), 256K native ctx, <think> by default, no MTP head. KV is tiny (~23 KiB/tok at q8_0 - aggressive GQA), so on 2x16GB the native 256k ctx stays FULLY GPU-RESIDENT with q8_0 KV up through Q5_K_M - no KV-quant compromise needed (q4_0 KV is slower AND lower quality here; only useful as a fit-enabler). Q6_K does not fit (LM Studio silently clamps layers to CPU regardless of KV quant -> ~59 tok/s). Prefill scales with quant dequant cost: Q4_K_M ~2x faster prompt ingest than Q5_K_M - matters for agentic long-context. bartowski imatrix ladder (incl. IQ4_XS, fastest option) under key deepreinforce-ai_ornith-1.0-35b; official repo dropped its Q4_K_M (keep the local copy). pbatch=2048 regresses both prefill and decode; keep default 512."
+    },
+    {
       "key": "ornith-1.0-9b",
       "hf_repo": "deepreinforce-ai/Ornith-1.0-9B-GGUF",
       "quants": ["q4_k_m"],
