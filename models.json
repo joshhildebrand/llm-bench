@@ -87,7 +87,7 @@
       "gpu": ["max"],
       "mtp": false,
       "thinking": "no_think",
-      "note": "Agentic-coding MoE, ~80B total / ~3B active (512 experts, 10 used + 1 shared), 48 blocks, hybrid Gated-DeltaNet linear attention (only 2 KV heads -> tiny KV cache, 256k native ctx). UD-Q2_K_XL (26.8 GB) fits 2x16GB fully resident. GGUF has no bundled MTP head. Non-thinking instruct. DeltaNet layers cost more GPU compute per token than plain attention, so resident decode is slower than qwen3-coder-30b despite similar active params."
+      "note": "Agentic-coding MoE, ~80B total / ~3B active (512 experts, 10 used + 1 shared), 48 blocks, hybrid Gated-DeltaNet linear attention (only 2 KV heads -> tiny KV cache, 256k native ctx). UD-Q2_K_XL (26.8 GB) fits 2x16GB fully resident. GGUF has no bundled MTP head. Non-thinking instruct. DeltaNet layers cost more GPU compute per token than plain attention, so resident decode is slower than qwen3-coder-30b despite similar active params. WARNING: decode scales inversely with TOTAL allocated ctx (32k=59, 256k=47, 512k=21 tok/s on dual 5060 Ti) - never over-allocate; multi-slot full-context is not viable, best fleet config is parallel=2 @ ctx 262144 (2x128k). Prefill ~940 tok/s is 3x slower than Ornith-35B - long-context agent turns feel slow."
     },
     {
       "key": "gpt-oss-120b",
