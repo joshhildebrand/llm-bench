@@ -209,3 +209,14 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1784340819,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx768k_kv4_iq4xs_par3,iq4_xs,786432,3,1,max,on,q4_0,8,off,decode,77.0,256.0,682.782,98.934,98.934,0.115,None,2
 1784340840,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx768k_kv4_iq4xs_par3,iq4_xs,786432,3,3,max,on,q4_0,8,off,decode,77.0,256.0,136.222,61.588,184.764,0.566,None,2
 1784340922,7-9800x3d-2x5060ti16g-64g-f732,ornith-1.0-35b,o35_ctx768k_kv4_iq4xs_par3_deep96k,iq4_xs,786432,3,1,max,on,q4_0,8,off,prefill,66144.0,1.0,2678.6,0.0,0.0,24.694,None,2
+1784350019,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx256k_kv8_q2,q2_k_xl,262144,1,1,max,on,q8_0,8,off,decode,78.0,256.0,590.909,47.048,47.048,0.132,None,3
+1784350062,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx256k_kv8_q2,q2_k_xl,262144,1,1,max,on,q8_0,8,off,prefill,11057.0,1.0,941.105,0.0,0.0,11.749,None,2
+1784350316,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_deep96k_q2_256k,q2_k_xl,262144,1,1,max,on,q8_0,8,off,prefill,66144.5,1.0,872.982,0.0,0.0,75.769,None,2
+1784350463,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx131072_kv8_q2,q2_k_xl,131072,1,1,max,on,q8_0,8,off,decode,78.0,256.0,597.952,55.629,55.629,0.133,None,2
+1784350497,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx32768_kv8_q2,q2_k_xl,32768,1,1,max,on,q8_0,8,off,decode,78.0,256.0,615.338,58.973,58.973,0.129,None,2
+1784350563,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx384k_kv8_q2_par3,q2_k_xl,393216,3,1,max,on,q8_0,8,off,decode,78.0,256.0,451.957,38.792,38.792,0.178,None,2
+1784350608,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx384k_kv8_q2_par3,q2_k_xl,393216,3,3,max,on,q8_0,8,off,decode,78.0,256.0,64.855,22.441,67.324,1.203,None,2
+1784350684,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx512k_kv8_q2_par2,q2_k_xl,524288,2,1,max,on,q8_0,8,off,decode,78.0,256.0,325.677,21.389,21.389,0.24,None,2
+1784350735,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx512k_kv8_q2_par2,q2_k_xl,524288,2,2,max,on,q8_0,8,off,decode,78.0,256.0,46.768,19.517,39.034,1.668,None,2
+1784350804,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx256k_kv8_q2_par2,q2_k_xl,262144,2,1,max,on,q8_0,8,off,decode,78.0,256.0,470.248,47.214,47.214,0.169,None,2
+1784350837,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx256k_kv8_q2_par2,q2_k_xl,262144,2,2,max,on,q8_0,8,off,decode,78.0,256.0,83.43,32.946,65.891,0.937,None,2
