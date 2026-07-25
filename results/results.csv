@@ -220,3 +220,5 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1784350735,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx512k_kv8_q2_par2,q2_k_xl,524288,2,2,max,on,q8_0,8,off,decode,78.0,256.0,46.768,19.517,39.034,1.668,None,2
 1784350804,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx256k_kv8_q2_par2,q2_k_xl,262144,2,1,max,on,q8_0,8,off,decode,78.0,256.0,470.248,47.214,47.214,0.169,None,2
 1784350837,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx256k_kv8_q2_par2,q2_k_xl,262144,2,2,max,on,q8_0,8,off,decode,78.0,256.0,83.43,32.946,65.891,0.937,None,2
+1784351819,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-next,cnext_ctx256k_kvf16_q2_par2,q2_k_xl,262144,2,2,max,on,f16,8,off,decode,78.0,256.0,89.441,29.54,59.079,0.873,None,2
+1784941321,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,q4ks_128k_p1_mtp_fullgpu_dualgpu_reconfirm,q4_k_s,131072,1,1,max,on,q8_0,8,on,decode,77.0,256.0,493.59,109.348,109.348,0.156,0.695,3
