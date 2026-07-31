@@ -4,10 +4,21 @@
     {
       "key": "qwen3.6-35b-a3b-mtp",
       "hf_repo": "unsloth/Qwen3.6-35B-A3B-MTP-GGUF",
-      "quants": ["q4_k_xl", "q5_k_xl", "q6_k_xl", "q8_k_xl"],
-      "contexts": [131072],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q4_k_xl",
+        "q5_k_xl",
+        "q6_k_xl",
+        "q8_k_xl"
+      ],
+      "contexts": [
+        131072
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": true,
       "thinking": "allow",
       "note": "Primary target. MoE 35B total / ~3B active; ships an MTP (multi-token-prediction) head for speculative decode. Sweep quants to find the largest that fully fits your VRAM at 128k ctx."
@@ -15,21 +26,38 @@
     {
       "key": "qwen3-coder-30b-a3b-instruct",
       "hf_repo": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
-      "quants": ["q4_k_xl"],
-      "contexts": [131072],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q4_k_xl"
+      ],
+      "contexts": [
+        131072
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "no_think",
-      "note": "Agentic-coding MoE, 30B total / ~3B active, 256K ctx (1M via YaRN), native tool-call format. NO MTP head (Qwen3-gen, not 3.6), so no speculative speedup on this box — expect ~no-MTP decode. Non-thinking instruct model. Smaller than the 35B (17.7GB Q4) and no vision projector."
+      "note": "Agentic-coding MoE, 30B total / ~3B active, 256K ctx (1M via YaRN), native tool-call format. NO MTP head (Qwen3-gen, not 3.6), so no speculative speedup on this box \u00e2\u20ac\u201d expect ~no-MTP decode. Non-thinking instruct model. Smaller than the 35B (17.7GB Q4) and no vision projector."
     },
     {
       "key": "qwen3.5-9b",
       "hf_repo": "unsloth/Qwen3.5-9B-GGUF",
-      "quants": ["q4_k_xl", "q6_k_xl"],
-      "contexts": [32768],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q4_k_xl",
+        "q6_k_xl"
+      ],
+      "contexts": [
+        32768
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "allow",
       "note": "Dense 9B, fits 8GB VRAM at Q4 (~6GB) -> fully GPU-resident. Note: dense reads ALL weights/token, so on a bandwidth-weak GPU it is not dramatically faster than the A3B MoE. Multimodal (mmproj available, disable for text)."
@@ -37,10 +65,21 @@
     {
       "key": "ornith-1.0-35b",
       "hf_repo": "deepreinforce-ai/Ornith-1.0-35B-GGUF",
-      "quants": ["q4_k_m", "q5_k_m", "q6_k"],
-      "contexts": [131072, 262144],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q4_k_m",
+        "q5_k_m",
+        "q6_k"
+      ],
+      "contexts": [
+        131072,
+        262144
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "allow",
       "note": "MoE agentic-coding reasoning model (qwen35moe arch), 256K native ctx, <think> by default, no MTP head. KV is tiny (~23 KiB/tok at q8_0 - aggressive GQA), so on 2x16GB the native 256k ctx stays FULLY GPU-RESIDENT with q8_0 KV up through Q5_K_M - no KV-quant compromise needed (q4_0 KV is slower AND lower quality here; only useful as a fit-enabler). Q6_K does not fit (LM Studio silently clamps layers to CPU regardless of KV quant -> ~59 tok/s). Prefill scales with quant dequant cost: Q4_K_M ~2x faster prompt ingest than Q5_K_M - matters for agentic long-context. bartowski imatrix ladder (incl. IQ4_XS, fastest option) under key deepreinforce-ai_ornith-1.0-35b; official repo dropped its Q4_K_M (keep the local copy). pbatch=2048 regresses both prefill and decode; keep default 512."
@@ -48,10 +87,18 @@
     {
       "key": "ornith-1.0-9b",
       "hf_repo": "deepreinforce-ai/Ornith-1.0-9B-GGUF",
-      "quants": ["q4_k_m"],
-      "contexts": [32768],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q4_k_m"
+      ],
+      "contexts": [
+        32768
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "allow",
       "note": "Dense 9B agentic-coding reasoning model (deepreinforce-ai), <think> by default. Q4_K_M ~5.6GB fits 8GB VRAM. An MTP GGUF variant exists (protoLabsAI) to test speculative decode on a resident 9B."
@@ -59,10 +106,18 @@
     {
       "key": "migtissera_tess-4-27b",
       "hf_repo": "bartowski/migtissera_Tess-4-27B-GGUF",
-      "quants": ["q4_k_s"],
-      "contexts": [32768],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q4_k_s"
+      ],
+      "contexts": [
+        32768
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "allow",
       "note": "Tess-4 finetune of the Qwen3.5/3.6 dense 27B (arch qwen35), general instruct/reasoning. Q4_K_S 17.6 GB fits dual-GPU resident. bartowski GGUF has no MTP head (the finetuner publishes a separate EAGLE3 draft model instead - untested, LM Studio draft-model support permitting). Multimodal mmproj-f16 disabled for text benches."
@@ -70,10 +125,18 @@
     {
       "key": "mistralai/devstral-small-2-2512",
       "hf_repo": "unsloth/Devstral-Small-2-24B-Instruct-2512-GGUF",
-      "quants": ["q8_0"],
-      "contexts": [32768],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q8_0"
+      ],
+      "contexts": [
+        32768
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "no_think",
       "note": "Mistral agentic coder, DENSE 24B (mistral3 arch), multimodal (disable mmproj for text benches). Dense = all 25 GB of Q8 weights read per token, split across both cards incl. the x1 link -> slow on the dual-5060Ti box (~9-11 tok/s). Q4_K_M (~14 GB) would fit a single 16 GB card and avoid the x1 hop entirely - likely the right quant there. HUB-KEYED MODEL: apply_config needs --gguf 'mistralai/devstral-small-2-2512' (see apply_config.py docstring)."
@@ -81,10 +144,20 @@
     {
       "key": "qwen3-coder-next",
       "hf_repo": "unsloth/Qwen3-Coder-Next-GGUF",
-      "quants": ["q2_k_xl", "q4_k_s", "q5_k_xl"],
-      "contexts": [32768],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q2_k_xl",
+        "q4_k_s",
+        "q5_k_xl"
+      ],
+      "contexts": [
+        32768
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "no_think",
       "note": "Agentic-coding MoE, ~80B total / ~3B active (512 experts, 10 used + 1 shared), 48 blocks, hybrid Gated-DeltaNet linear attention (only 2 KV heads -> tiny KV cache, 256k native ctx). UD-Q2_K_XL (26.8 GB) fits 2x16GB fully resident. GGUF has no bundled MTP head. Non-thinking instruct. DeltaNet layers cost more GPU compute per token than plain attention, so resident decode is slower than qwen3-coder-30b despite similar active params. WARNING: decode scales inversely with TOTAL allocated ctx (32k=59, 256k=47, 512k=21 tok/s on dual 5060 Ti) - never over-allocate; multi-slot full-context is not viable, best fleet config is parallel=2 @ ctx 262144 (2x128k). Prefill ~940 tok/s is 3x slower than Ornith-35B - long-context agent turns feel slow."
@@ -92,10 +165,18 @@
     {
       "key": "gpt-oss-120b",
       "hf_repo": "unsloth/gpt-oss-120b-GGUF",
-      "quants": ["q8_0"],
-      "contexts": [32768],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q8_0"
+      ],
+      "contexts": [
+        32768
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "allow",
       "note": "OpenAI gpt-oss. MoE 117B total / 5.1B active, 36 layers, 128 experts top-4. Experts are native MXFP4, so Q8_0 (63.4 GB, attention at Q8) is effectively the only quant. Does NOT fit 32 GB VRAM -> hybrid is mandatory: cpu_experts down from 1.0, keep_in_ram=false, mmap=true, flash on. DANGER: a full-GPU or big-ctx/no-flash load overflows VRAM into CUDA sysmem fallback (committed host RAM) and can hard-lock a 64 GB box. Run ramguard.ps1 during loads."
@@ -103,10 +184,18 @@
     {
       "key": "nvidia-nemotron-3-super-120b-a12b",
       "hf_repo": "unsloth/NVIDIA-Nemotron-3-Super-120B-A12B-GGUF",
-      "quants": ["ud_q2_k_xl"],
-      "contexts": [32768],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "ud_q2_k_xl"
+      ],
+      "contexts": [
+        32768
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "allow",
       "note": "Hybrid Mamba-2 + LatentMoE, 121B total / ~12B active (22 of 512 experts + 1 shared), 88 blocks. BF16-trained so quants scale for real (52.7 GB IQ1_M to 128 GB Q8_0) - but the dense/Mamba floor keeps even 1-bit at ~53 GB, so it's always hybrid on <=32 GB VRAM, and 12B active makes hybrid decode slow (~2x the bytes/token of gpt-oss-120b). The unsloth GGUF does NOT bundle the MTP head - LM Studio rejects draftMtp. Same OOM guardrails as gpt-oss-120b apply."
@@ -114,13 +203,42 @@
     {
       "key": "nvidia/nemotron-3-nano-4b",
       "hf_repo": "lmstudio-community/NVIDIA-Nemotron-3-Nano-4B-GGUF",
-      "quants": ["q8_0"],
-      "contexts": [8192],
-      "parallel": [1],
-      "gpu": ["max"],
+      "quants": [
+        "q8_0"
+      ],
+      "contexts": [
+        8192
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
       "mtp": false,
       "thinking": "allow",
       "note": "Small model used to prove the harness is model-agnostic (fits fully on a small GPU)."
+    },
+    {
+      "key": "openai/gpt-oss-20b",
+      "hf_repo": "lmstudio-community/gpt-oss-20b-GGUF",
+      "quants": [
+        "mxfp4"
+      ],
+      "contexts": [
+        131072
+      ],
+      "parallel": [
+        4,
+        8,
+        16
+      ],
+      "gpu": [
+        "max"
+      ],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "MoE 20B total / ~3.6B active, native MXFP4 (~11.28 GiB) - do NOT use a Q8 'upcast' quant, it is ~1 GiB larger for no quality gain. Fits 131k ctx in 16GB VRAM. CRITICAL: LM Studio's auto offload ratio silently leaves ~2GB VRAM free and runs expert layers on CPU (GPU util ~40%, high CPU); set offload=1.0 via apply_config.py or you lose ~40% of decode. With flash=on + kv q8_0 + offload=1.0 the whole model is resident (GPU util ~76%). KV cache is UNIFIED (kv_unified=true): n_ctx is a single pool SHARED across all parallel slots, NOT per-slot - VRAM is nearly identical at parallel 4/8/16, so N agents share 131k total. No MTP head."
     }
   ]
 }
