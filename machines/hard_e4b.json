@@ -1,0 +1,189 @@
+{
+ "model": "gemma-4-E4B-it-qat",
+ "results": [
+  {
+   "id": "H1",
+   "name": "long multi-topic \u2014 durable buried in chatter",
+   "facts": [
+    "Josh was woken up by the UPS in the basement beeping | When: on Sunday, August 02, 2026 | Involving: Josh",
+    "Josh mandates that Astra always checks the NAS backup status before confirming a deployment is safe, establishing this as a standing rule for their collaboration. | Involving: Josh, Astra",
+    "Gina has a work trip scheduled, meaning Josh will be solo with the dog during that time. | When: the week of August 17, 2026 | Involving: Gina, Josh"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2142,
+    "output_tokens": 377,
+    "total_tokens": 2519,
+    "cached_tokens": 0,
+    "thoughts_tokens": 956
+   }
+  },
+  {
+   "id": "H2",
+   "name": "contradiction across turns (later wins)",
+   "facts": [
+    "Josh maintains a strict time zone protocol: Pacific Time must be used for all client-facing communications due to his clientele, while Ohio Time is designated for personal matters. | Involving: Josh | To accommodate half of his clients who are in the Pacific time zone."
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2078,
+    "output_tokens": 162,
+    "total_tokens": 2240,
+    "cached_tokens": 0,
+    "thoughts_tokens": 581
+   }
+  },
+  {
+   "id": "H3",
+   "name": "hypothetical must NOT become fact",
+   "facts": [
+    "Josh requires a mini-split to be installed in the garage before moving the rack there. | Involving: Josh | Infrastructure preparation for equipment relocation."
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2055,
+    "output_tokens": 137,
+    "total_tokens": 2192,
+    "cached_tokens": 0,
+    "thoughts_tokens": 606
+   }
+  },
+  {
+   "id": "H4",
+   "name": "negation / preference stated as a don't",
+   "facts": [
+    "Josh mandates that Pull Requests on 'fiveforge' repositories must never be auto-approved and require human review every time, even if tests pass. | Involving: Josh"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2048,
+    "output_tokens": 142,
+    "total_tokens": 2190,
+    "cached_tokens": 0,
+    "thoughts_tokens": 519
+   }
+  },
+  {
+   "id": "H5",
+   "name": "third-party speech \u2014 attribution trap",
+   "facts": [
+    "Gina prefers switching the alarm company due to frustration with frequent false alarms. | Involving: Gina",
+    "Josh is hesitant to switch the alarm company and requires reviewing the contract first. | Involving: Josh"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2057,
+    "output_tokens": 231,
+    "total_tokens": 2288,
+    "cached_tokens": 0,
+    "thoughts_tokens": 629
+   }
+  },
+  {
+   "id": "H6",
+   "name": "credentials buried in a long technical block",
+   "facts": [
+    "Josh has a standing preference that all new nodes must utilize tailscale and key-only SSH authentication, ensuring no password authentication is used in the final state. | Involving: Josh (preference stated to Astra)"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2129,
+    "output_tokens": 159,
+    "total_tokens": 2288,
+    "cached_tokens": 0,
+    "thoughts_tokens": 584
+   }
+  },
+  {
+   "id": "H7",
+   "name": "quantities and precision",
+   "facts": [
+    "The 9800X3D box is configured with 64GB of RAM and two 5060 Ti cards, each having 16GB. | Involving: Josh (describing infrastructure to Astra) | Infrastructure detail regarding the working environment.",
+    "The dev-lsi system is configured with 62GB of RAM and one 5060 Ti card, having replaced a 1070. | Involving: Josh (describing infrastructure to Astra) | Infrastructure detail regarding the working environment."
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2084,
+    "output_tokens": 355,
+    "total_tokens": 2439,
+    "cached_tokens": 0,
+    "thoughts_tokens": 618
+   }
+  },
+  {
+   "id": "H8",
+   "name": "recurring vs one-time",
+   "facts": [
+    "Josh has a fixed habit of performing a full backup review every Sunday evening. | When: Every Sunday evening | Involving: Josh"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2056,
+    "output_tokens": 136,
+    "total_tokens": 2192,
+    "cached_tokens": 0,
+    "thoughts_tokens": 759
+   }
+  },
+  {
+   "id": "H9",
+   "name": "sarcasm / humour must not be literal",
+   "facts": [
+    "Josh expresses strong, perhaps ironic, affection for the current printer despite its operational issues. | Involving: Josh",
+    "Josh plans to replace the current printer with a Brother model if it jams again. | Involving: Josh | The current printer is unreliable and prone to jamming."
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2060,
+    "output_tokens": 244,
+    "total_tokens": 2304,
+    "cached_tokens": 0,
+    "thoughts_tokens": 673
+   }
+  },
+  {
+   "id": "H10",
+   "name": "ambiguous pronoun across turns",
+   "facts": [
+    "Mike supports the Anvil migration, but Gina does not support the kitchen-related discussion. | When: 2026-08-02T14:00:00+00:00 | Involving: Josh, Mike, Gina | Context for task prioritization regarding the Anvil migration and kitchen project."
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2057,
+    "output_tokens": 182,
+    "total_tokens": 2239,
+    "cached_tokens": 0,
+    "thoughts_tokens": 700
+   }
+  },
+  {
+   "id": "H11",
+   "name": "correction mid-sentence",
+   "facts": [
+    "Josh's sister has her birthday on August 21st. | Involving: Josh, Josh's sister",
+    "Josh admits to frequently mixing up dates. | Involving: Josh"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2051,
+    "output_tokens": 222,
+    "total_tokens": 2273,
+    "cached_tokens": 0,
+    "thoughts_tokens": 647
+   }
+  },
+  {
+   "id": "H12",
+   "name": "pure operational noise, long",
+   "facts": [],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2071,
+    "output_tokens": 19,
+    "total_tokens": 2090,
+    "cached_tokens": 0,
+    "thoughts_tokens": 494
+   }
+  }
+ ]
+}

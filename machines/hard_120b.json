@@ -1,0 +1,189 @@
+{
+ "model": "gpt-oss-120b-OPENROUTER",
+ "results": [
+  {
+   "id": "H1",
+   "error": "HTTP Error 500: Internal Server Error"
+  },
+  {
+   "id": "H2",
+   "name": "contradiction across turns (later wins)",
+   "facts": [
+    "Josh prefers using Ohio time for personal matters and Pacific time for any client\u2011facing activities. | When: Sunday, August 02, 2026 | Involving: Josh (user) | to keep personal and client schedules in appropriate time zones"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2893,
+    "output_tokens": 148,
+    "total_tokens": 3041,
+    "cached_tokens": 64,
+    "thoughts_tokens": 703
+   }
+  },
+  {
+   "id": "H3",
+   "name": "hypothetical must NOT become fact",
+   "facts": [
+    "Josh wants a mini-split installed in the garage before moving the rack there. | Involving: Josh",
+    "Josh does not plan to move the rack to the garage in 2026. | When: 2026 | Involving: Josh"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2876,
+    "output_tokens": 209,
+    "total_tokens": 3085,
+    "cached_tokens": 64,
+    "thoughts_tokens": 1059
+   }
+  },
+  {
+   "id": "H4",
+   "name": "negation / preference stated as a don't",
+   "facts": [
+    "Josh does not want auto\u2011approval of pull requests on the fiveforge repositories; a human must review each PR even if tests pass. | Involving: Josh (user) | To ensure a human is in the loop for code changes."
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2857,
+    "output_tokens": 119,
+    "total_tokens": 2976,
+    "cached_tokens": 0,
+    "thoughts_tokens": 595
+   }
+  },
+  {
+   "id": "H5",
+   "name": "third-party speech \u2014 attribution trap",
+   "facts": [
+    "Gina believes they should switch the alarm company because she is fed up with false alarms | Involving: Gina | Fed up with false alarms",
+    "Josh is not convinced yet and wants to see the contract before deciding to switch the alarm company | Involving: Josh (user) | Wants to review contract before making a decision"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2876,
+    "output_tokens": 223,
+    "total_tokens": 3099,
+    "cached_tokens": 64,
+    "thoughts_tokens": 630
+   }
+  },
+  {
+   "id": "H6",
+   "name": "credentials buried in a long technical block",
+   "facts": [
+    "Node named dev-lsi uses tailnet address 100.64.0.20 and runs CachyOS | Involving: Josh",
+    "SSH key for the node is named josh-dev-lsi | Involving: Josh",
+    "Standing preference: every new node should have Tailscale and key\u2011only SSH, with no password authentication | Involving: Josh"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2938,
+    "output_tokens": 381,
+    "total_tokens": 3319,
+    "cached_tokens": 64,
+    "thoughts_tokens": 866
+   }
+  },
+  {
+   "id": "H7",
+   "name": "quantities and precision",
+   "facts": [
+    "The 9800X3D box has 64\u202fGB RAM and two 5060\u202fTi cards, each 16\u202fGB. | Involving: Josh (user)",
+    "dev\u2011lsi currently has 62\u202fGB RAM and a single 5060\u202fTi card after removing the 1070. | Involving: Josh (user)"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2882,
+    "output_tokens": 319,
+    "total_tokens": 3201,
+    "cached_tokens": 0,
+    "thoughts_tokens": 596
+   }
+  },
+  {
+   "id": "H8",
+   "name": "recurring vs one-time",
+   "facts": [
+    "Josh has a fixed habit of doing a full backup review every Sunday evening. | Involving: Josh",
+    "Josh will be at Gina's parents' house on Sunday, August 2, 2026. | When: 2026-08-02 | Involving: Josh, Gina",
+    "Josh is skipping his usual Sunday evening full backup review because he will be at Gina's parents' house. | When: 2026-08-02 | Involving: Josh | Will be at Gina's parents' house"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2900,
+    "output_tokens": 470,
+    "total_tokens": 3370,
+    "cached_tokens": 768,
+    "thoughts_tokens": 871
+   }
+  },
+  {
+   "id": "H9",
+   "name": "sarcasm / humour must not be literal",
+   "facts": [
+    "Josh says he will replace the jam\u2011prone printer with a Brother printer if it jams again | Involving: Josh (user), Astra | because the current printer frequently jams"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2868,
+    "output_tokens": 80,
+    "total_tokens": 2948,
+    "cached_tokens": 0,
+    "thoughts_tokens": 553
+   }
+  },
+  {
+   "id": "H10",
+   "name": "ambiguous pronoun across turns",
+   "facts": [
+    "Josh talked to Mike about the Anvil migration; Mike is on board | When: 2026-08-02 | Involving: Josh, Mike",
+    "Josh talked to Gina about the kitchen; Gina is not on board | When: 2026-08-02 | Involving: Josh, Gina",
+    "Josh decided to push the Anvil migration and hold the kitchen plan | When: 2026-08-02 | Involving: Josh | Based on Mike's support and Gina's lack of support"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2876,
+    "output_tokens": 524,
+    "total_tokens": 3400,
+    "cached_tokens": 64,
+    "thoughts_tokens": 999
+   }
+  },
+  {
+   "id": "H11",
+   "name": "correction mid-sentence",
+   "facts": [
+    "Josh's sister's birthday is on the 21st of the month | When: the 21st | Involving: Josh (user), sister"
+   ],
+   "leaked": [],
+   "usage": {
+    "input_tokens": 2871,
+    "output_tokens": 157,
+    "total_tokens": 3028,
+    "cached_tokens": 2816,
+    "thoughts_tokens": 307
+   }
+  },
+  {
+   "id": "H12",
+   "name": "pure operational noise, long",
+   "facts": [
+    "Josh ran a sweep of 14 rows; three timed out, he re\u2011ran them, achieving two passes and one remaining failure. | When: Sunday, August 02, 2026 | Involving: Josh",
+    "Josh restarted the service, cleared the queue, and resolved the issue; logs are stored at /tmp/sweep7.log. | When: Sunday, August 02, 2026 | Involving: Josh | to fix the remaining sweep failure"
+   ],
+   "leaked": [
+    "14 rows",
+    "sweep7.log",
+    "restarted the service",
+    "three timed out"
+   ],
+   "usage": {
+    "input_tokens": 2918,
+    "output_tokens": 368,
+    "total_tokens": 3286,
+    "cached_tokens": 0,
+    "thoughts_tokens": 911
+   }
+  }
+ ]
+}
