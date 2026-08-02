@@ -260,3 +260,7 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1785642506,i7-5960x-1x5060ti16g-63g-c45b,gemma-4-26b-a4b-it,hindsight-candidate-32k,iq4_xs,32768,8,2,max,on,q8_0,8,off,decode,81.0,256.0,1122.255,50.099,100.198,0.088,None,3
 1785642538,i7-5960x-1x5060ti16g-63g-c45b,gemma-4-26b-a4b-it,hindsight-candidate-32k,iq4_xs,32768,8,4,max,on,q8_0,8,off,decode,81.0,256.0,539.948,32.82,131.278,0.152,None,3
 1785642594,i7-5960x-1x5060ti16g-63g-c45b,gemma-4-26b-a4b-it,hindsight-candidate-32k,iq4_xs,32768,8,8,max,on,q8_0,8,off,decode,81.0,256.0,342.529,19.098,152.784,0.243,None,3
+1785644015,i7-5960x-1x5060ti16g-63g-c45b,gemma-4-e4b-it-qat,hindsight-candidate-e4b,q4_k_xl_qat,131072,16,1,max,on,q8_0,8,off,decode,81.0,256.0,2926.301,78.703,78.703,0.028,None,3
+1785644042,i7-5960x-1x5060ti16g-63g-c45b,gemma-4-e4b-it-qat,hindsight-candidate-e4b,q4_k_xl_qat,131072,16,4,max,on,q8_0,8,off,decode,81.0,256.0,920.732,39.448,157.791,0.09,None,3
+1785644088,i7-5960x-1x5060ti16g-63g-c45b,gemma-4-e4b-it-qat,hindsight-candidate-e4b,q4_k_xl_qat,131072,16,8,max,on,q8_0,8,off,decode,81.0,256.0,507.609,23.051,184.407,0.162,None,3
+1785644170,i7-5960x-1x5060ti16g-63g-c45b,gemma-4-e4b-it-qat,hindsight-candidate-e4b,q4_k_xl_qat,131072,16,16,max,on,q8_0,8,off,decode,81.0,256.0,368.741,12.843,205.491,0.266,None,3
