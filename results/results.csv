@@ -245,3 +245,7 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1785502583,i7-5960x-1x5060ti16g-63g-c45b,gpt-oss-20b,devlsi-131k-p16,mxfp4,131072,16,8,max,on,q8_0,8,off,decode,135.0,256.0,922.905,22.488,179.902,0.15,None,3
 1785502648,i7-5960x-1x5060ti16g-63g-c45b,gpt-oss-20b,devlsi-131k-p16,mxfp4,131072,16,12,max,on,q8_0,8,off,decode,135.0,256.0,941.092,17.647,211.763,0.152,None,3
 1785502729,i7-5960x-1x5060ti16g-63g-c45b,gpt-oss-20b,devlsi-131k-p16,mxfp4,131072,16,16,max,on,q8_0,8,off,decode,135.0,256.0,537.337,14.104,225.657,0.265,None,3
+1785611900,i7-5960x-1x5060ti16g-63g-c45b,qwen3.5-9b,hindsight-candidate,q8_0,131072,8,1,max,on,q8_0,8,off,decode,77.0,256.0,1417.317,39.502,39.502,0.054,None,3
+1785611933,i7-5960x-1x5060ti16g-63g-c45b,qwen3.5-9b,hindsight-candidate,q8_0,131072,8,2,max,on,q8_0,8,off,decode,77.0,256.0,672.704,33.162,66.324,0.124,None,3
+1785611975,i7-5960x-1x5060ti16g-63g-c45b,qwen3.5-9b,hindsight-candidate,q8_0,131072,8,4,max,on,q8_0,8,off,decode,77.0,256.0,411.182,25.421,101.683,0.196,None,3
+1785612038,i7-5960x-1x5060ti16g-63g-c45b,qwen3.5-9b,hindsight-candidate,q8_0,131072,8,8,max,on,q8_0,8,off,decode,77.0,256.0,213.41,17.03,136.239,0.373,None,3
