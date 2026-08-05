@@ -24,7 +24,12 @@ BASE = (
 )
 
 # Rough heuristic: ~4 characters per token for English prose.
-TARGETS = {"prefill_2k.txt": 2000, "prefill_16k.txt": 16000}
+# 64k exists to probe *deep*-context behaviour: prefill cost and post-prefill decode
+# grow with context, and on models with a mixed global/sliding-window attention layout
+# a 16k probe is too shallow to show it. Regenerating is byte-stable, so the 2k/16k
+# files (and every row already benchmarked against them) are unaffected.
+TARGETS = {"prefill_2k.txt": 2000, "prefill_16k.txt": 16000,
+           "prefill_64k.txt": 64000}
 INSTRUCTION = (
     "\n\nBased only on the passage above, reply with exactly one word: OK"
 )
