@@ -21,7 +21,7 @@
       ],
       "mtp": true,
       "thinking": "allow",
-      "note": "Primary target. MoE 35B total / ~3B active; ships an MTP (multi-token-prediction) head for speculative decode. Sweep quants to find the largest that fully fits your VRAM at 128k ctx."
+      "note": "Primary target. MoE 35B total / ~3B active; ships an MTP (multi-token-prediction) head for speculative decode. Sweep quants to find the largest that fully fits your VRAM at 128k ctx. WARNING (f732, 2026-08-05): MTP REGRESSED on 2026-07-14 and is now a ~14% LOSS on IQ4_XS - 78.3 tok/s with MTP (accept 0.866) vs 91.7 without, at both 32k and 128k. On 07-13 the same config was 100.5 with MTP at accept 0.644. Acceptance went UP while throughput went DOWN, so the verify path got more expensive. Turn MTP off and re-check after any runtime upgrade. DFlash (z-lab draft model) does NOT work in LM Studio: the engine knows the arch but LM Studio only exposes draftMtp/draftSimple, and dflash needs ctx_other (it taps target_layers hidden states) -> draft context fails to init and decode drops to 64.2 tok/s."
     },
     {
       "key": "qwen3-coder-30b-a3b-instruct",
