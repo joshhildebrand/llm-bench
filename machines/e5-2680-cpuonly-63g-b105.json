@@ -1,0 +1,16 @@
+{
+  "machine_id": "e5-2680-cpuonly-63g-b105",
+  "first_seen": 1785973601,
+  "specs": {
+    "cpu": "Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz",
+    "cpu_cores_physical": 14,
+    "cpu_cores_logical": 28,
+    "ram_gb": 62.7,
+    "gpus": [],
+    "gpu_summary": "no-nvidia-gpu",
+    "os": "Linux 7.0.2-6-pve",
+    "ram_note": "8x8GB DDR4-2666 single-rank RDIMM clocked to 2400 MT/s (Broadwell-EP IMC ceiling); 2 DIMMs in each of CPU1's 4 channels - evenly balanced. 76.8 GB/s theoretical, 48.0 GB/s measured STREAM Triad (62.5 pct)",
+    "cpu_note": "Broadwell-EP, AVX2+FMA but NO AVX-512. 1 of 2 sockets populated; 35 MiB L3. STREAM Triad by threads: 1/11.6, 4/36.0, 8/46.1, 14/48.0, 28/46.3 GB/s - saturates at ~8 threads, hyperthreading regresses"
+  },
+  "note": "CPU-ONLY: no GPU of any kind (Matrox G200eR2 BMC video only), so every row is pure CPU inference with no hybrid-offload contribution - unlike the other machines in this repo. Served by llama.cpp llama-server (not LM Studio) via bench.py --api llamacpp. Rows with mtp=off are genuinely MTP OFF: llama.cpp requires --spec-type draft-mtp to use the GGUF's blk.40.nextn.* head, and silently drops it otherwise. An otherwise-idle 2U dual-socket server chassis with only 1 of 2 sockets populated."
+}

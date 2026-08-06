@@ -40,7 +40,7 @@
       ],
       "mtp": false,
       "thinking": "no_think",
-      "note": "Agentic-coding MoE, 30B total / ~3B active, 256K ctx (1M via YaRN), native tool-call format. NO MTP head (Qwen3-gen, not 3.6), so no speculative speedup on this box \u00e2\u20ac\u201d expect ~no-MTP decode. Non-thinking instruct model. Smaller than the 35B (17.7GB Q4) and no vision projector."
+      "note": "Agentic-coding MoE, 30B total / ~3B active, 256K ctx (1M via YaRN), native tool-call format. NO MTP head (Qwen3-gen, not 3.6), so no speculative speedup on this box â€” expect ~no-MTP decode. Non-thinking instruct model. Smaller than the 35B (17.7GB Q4) and no vision projector."
     },
     {
       "key": "qwen3.5-9b",
@@ -278,6 +278,28 @@
       "mtp": false,
       "thinking": "allow",
       "note": "MoE 20B total / ~3.6B active, native MXFP4 (~11.28 GiB) - do NOT use a Q8 'upcast' quant, it is ~1 GiB larger for no quality gain. Fits 131k ctx in 16GB VRAM. CRITICAL: LM Studio's auto offload ratio silently leaves ~2GB VRAM free and runs expert layers on CPU (GPU util ~40%, high CPU); set offload=1.0 via apply_config.py or you lose ~40% of decode. With flash=on + kv q8_0 + offload=1.0 the whole model is resident (GPU util ~76%). KV cache is UNIFIED (kv_unified=true): n_ctx is a single pool SHARED across all parallel slots, NOT per-slot - VRAM is nearly identical at parallel 4/8/16, so N agents share 131k total. No MTP head."
+    },
+    {
+      "key": "gemma-4-e4b-it",
+      "hf_repo": "unsloth/gemma-4-E4B-it-GGUF",
+      "quants": [
+        "q4_k_xl",
+        "q5_k_xl",
+        "q6_k_xl",
+        "q8_k_xl"
+      ],
+      "contexts": [
+        32768
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
+      "mtp": true,
+      "thinking": "allow",
+      "note": "Gemma 4 E4B (arch 'gemma4'): 7.5B total params, 'effective 4B' active -- 42 blocks, d_model 2560, GQA 8/2 with an unusually large 512 key/value length, 512 sliding-window attention, 128K ctx, natively multimodal (text/image/audio/video). MTP IS A SEPARATE FILE, unlike Qwen3.6 which bakes blk.N.nextn.* into the main GGUF: download MTP/mtp-gemma-4-E4B-it-Q8_0.gguf (~0.1 GB) and pass it as the draft model (-md) alongside --spec-type draft-mtp. Multimodal mmproj is a separate file too, so text-only runs never pay for it -- no disable_vision.sh dance needed. Small enough that every quant fits any modern box, so the quant question here is purely speed/quality, not fit."
     }
   ]
 }
