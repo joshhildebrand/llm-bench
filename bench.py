@@ -1,9 +1,18 @@
 #!/usr/bin/env python3
-"""Single-stream tokens/sec benchmark against LM Studio's native REST API.
+"""tokens/sec benchmark against a local model server (LM Studio or llama.cpp).
 
-Hits POST /api/v0/chat/completions, which returns per-request timing in
-`stats` (tokens_per_second, time_to_first_token, generation_time) and token
-counts in `usage` (including MTP draft acceptance). No third-party deps.
+Two backends, selected with --api; the CSV schema and every derived number are
+identical between them, so rows from both are directly comparable:
+
+  lmstudio (default)  POST /api/v0/chat/completions — per-request timing in
+                      `stats` (tokens_per_second, time_to_first_token,
+                      generation_time), token counts in `usage` (incl. MTP
+                      draft acceptance).
+  llamacpp            POST /v1/chat/completions against llama-server — the same
+                      information in `timings` (predicted_per_second, prompt_ms,
+                      prompt_per_second, draft_n/draft_n_accepted).
+
+No third-party deps.
 
 Two modes:
   decode  -> pure generation rate. Long output, tg_tok_s = stats.tokens_per_second.
@@ -36,6 +45,15 @@ import machine
 HOST = os.environ.get("LMS_HOST", "http://localhost:1234")
 ENDPOINT = HOST + "/api/v0/chat/completions"
 
+# Backends. LM Studio's native endpoint reports per-request timing under `stats`;
+# llama.cpp's llama-server reports the same information under `timings` on the
+# OpenAI-compatible route. Everything downstream (CSV schema, medians, concurrency)
+# is backend-agnostic — only the response shape differs, so we normalise it here.
+API_ROUTES = {
+    "lmstudio": "/api/v0/chat/completions",
+    "llamacpp": "/v1/chat/completions",
+}
+
 # One unified schema. Concurrency is first-class: every row records how many
 # streams ran (1 = single-stream), the per-stream decode rate (tg_tok_s), and the
 # aggregate decode rate across all streams (tg_tok_s_agg = tg_tok_s x concurrency).
@@ -52,10 +70,63 @@ CSV_COLUMNS = [
 def post(payload: dict, timeout: float) -> dict:
     data = json.dumps(payload).encode()
     req = urllib.request.Request(
-        ENDPOINT, data=data, headers={"Content-Type": "application/json"}
+        endpoint(), data=data, headers={"Content-Type": "application/json"}
     )
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return json.loads(resp.read().decode())
+
+
+def endpoint() -> str:
+    """Full URL for the configured backend (--host wins over the env default)."""
+    host = (args.host or HOST).rstrip("/")
+    return host + API_ROUTES[args.api]
+
+
+def parse_timing(body: dict) -> dict:
+    """Normalise a backend response into the fields the CSV row needs.
+
+    LM Studio  -> body["stats"]   : tokens_per_second, time_to_first_token
+    llama.cpp  -> body["timings"] : predicted_per_second, prompt_ms, prompt_per_second
+    """
+    usage = body.get("usage", {})
+    ptoks = usage.get("prompt_tokens", 0)
+
+    if args.api == "llamacpp":
+        t = body.get("timings", {})
+        # prompt_ms is the time spent ingesting the prompt == time to first token.
+        ttft = (t.get("prompt_ms") or 0) / 1000.0 or None
+        pp = t.get("prompt_per_second")
+        if pp is None and ttft and ptoks:
+            pp = ptoks / ttft
+        # Speculative decode (when a draft model is attached) reports draft counts.
+        total_draft = t.get("draft_n") or 0
+        accepted = t.get("draft_n_accepted") or 0
+        return {
+            "tg_tok_s": t.get("predicted_per_second"),
+            "ttft_s": ttft,
+            "pp_tok_s": pp,
+            "prompt_tokens": ptoks,
+            "completion_tokens": usage.get("completion_tokens", 0),
+            "accept_rate": (accepted / total_draft) if total_draft else None,
+        }
+
+    stats = body.get("stats", {})
+    ttft = stats.get("time_to_first_token")
+    # Some model/server combos (e.g. gpt-oss) report ttft=0 on non-streaming
+    # requests and carry the prefill time in generation_time instead. For a
+    # 1-token prefill probe, generation_time IS the prompt-processing time.
+    if not ttft and args.mode == "prefill":
+        ttft = stats.get("generation_time")
+    total_draft = usage.get("total_draft_tokens_count") or 0
+    accepted = usage.get("accepted_draft_tokens_count") or 0
+    return {
+        "tg_tok_s": stats.get("tokens_per_second"),
+        "ttft_s": ttft,
+        "pp_tok_s": (ptoks / ttft) if (ttft and ptoks) else None,
+        "prompt_tokens": ptoks,
+        "completion_tokens": usage.get("completion_tokens", 0),
+        "accept_rate": (accepted / total_draft) if total_draft else None,
+    }
 
 
 def one_request(prompt: str, max_tokens: int, timeout: float) -> dict:
@@ -73,26 +144,12 @@ def one_request(prompt: str, max_tokens: int, timeout: float) -> dict:
     }
     if args.seed is not None:
         payload["seed"] = args.seed
-    body = post(payload, timeout)
-    stats = body.get("stats", {})
-    usage = body.get("usage", {})
-    ttft = stats.get("time_to_first_token")
-    # Some model/server combos (e.g. gpt-oss) report ttft=0 on non-streaming
-    # requests and carry the prefill time in generation_time instead. For a
-    # 1-token prefill probe, generation_time IS the prompt-processing time.
-    if not ttft and args.mode == "prefill":
-        ttft = stats.get("generation_time")
-    ptoks = usage.get("prompt_tokens", 0)
-    total_draft = usage.get("total_draft_tokens_count") or 0
-    accepted = usage.get("accepted_draft_tokens_count") or 0
-    return {
-        "tg_tok_s": stats.get("tokens_per_second"),
-        "ttft_s": ttft,
-        "pp_tok_s": (ptoks / ttft) if (ttft and ptoks) else None,
-        "prompt_tokens": ptoks,
-        "completion_tokens": usage.get("completion_tokens", 0),
-        "accept_rate": (accepted / total_draft) if total_draft else None,
-    }
+    if args.api == "llamacpp":
+        # llama-server reuses the KV cache across requests with an identical
+        # prefix. For prefill the uuid above already defeats that; for decode we
+        # want a clean slot each time so the measured rate is not a cache artefact.
+        payload["cache_prompt"] = False
+    return parse_timing(post(payload, timeout))
 
 
 def run_batch(prompt: str, max_tokens: int, timeout: float, concurrency: int) -> list:
@@ -125,7 +182,8 @@ def main() -> int:
     conc = 1 if args.mode == "prefill" else max(1, args.concurrency)
     print(f"[bench] {args.model} mode={args.mode} concurrency={conc} "
           f"prompt={os.path.basename(args.prompt)} max_tokens={max_tokens} "
-          f"warmup={args.warmup} runs={args.runs}", file=sys.stderr)
+          f"warmup={args.warmup} runs={args.runs} api={args.api} "
+          f"endpoint={endpoint()}", file=sys.stderr)
 
     for i in range(args.warmup):
         try:
@@ -208,6 +266,12 @@ if __name__ == "__main__":
     p.add_argument("--model-name", default=None, dest="model_name",
                    help="model name recorded in the CSV (default: --model). Use when "
                         "loading under a stable identifier so rows show the real model.")
+    p.add_argument("--api", choices=["lmstudio", "llamacpp"], default="lmstudio",
+                   help="server backend: LM Studio native (default) or llama.cpp "
+                        "llama-server's OpenAI-compatible route")
+    p.add_argument("--host", default=None,
+                   help="server base URL (default: $LMS_HOST or http://localhost:1234; "
+                        "llama-server's default port is 8080)")
     p.add_argument("--mode", choices=["decode", "prefill"], default="decode")
     p.add_argument("--prompt", required=True)
     p.add_argument("--max-tokens", type=int, default=256, dest="max_tokens")
