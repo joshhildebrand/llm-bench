@@ -376,3 +376,8 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1785988264,e5-2680-cpuonly-63g-b105,gemma-4-e4b-it,g_conc_mtp_d1,q4_k_xl,8192,8,2,none,on,q8_0,14,draft-mtp:d1:ext,decode,81.0,256.0,36.077,15.476,30.951,2.245,0.802,2
 1785988362,e5-2680-cpuonly-63g-b105,gemma-4-e4b-it,g_conc_mtp_d1,q4_k_xl,8192,8,4,none,on,q8_0,14,draft-mtp:d1:ext,decode,81.0,256.0,18.754,9.003,36.013,4.319,0.789,2
 1785988531,e5-2680-cpuonly-63g-b105,gemma-4-e4b-it,g_conc_mtp_d1,q4_k_xl,8192,8,8,none,on,q8_0,14,draft-mtp:d1:ext,decode,81.0,256.0,9.462,5.365,42.919,8.561,0.789,2
+1785996613,e5-2680-cpuonly-63g-04c2,qwen3.6-35b-a3b-mtp,opt_xl_nospec,q4_k_xl,32768,1,1,none,off,f16,14,off,decode,77.0,256.0,54.264,12.947,12.947,1.419,None,3
+1785996740,e5-2680-cpuonly-63g-04c2,qwen3.6-35b-a3b-mtp,opt_ks_nospec,q4_k_s,32768,1,1,none,off,f16,14,off,decode,77.0,256.0,59.987,13.607,13.607,1.284,None,3
+1785996854,e5-2680-cpuonly-63g-04c2,qwen3.6-35b-a3b-mtp,opt_xl_mtp1,q4_k_xl,32768,1,1,none,off,f16,14,draft-mtp:d1,decode,77.0,256.0,52.91,16.874,16.874,1.455,0.861,3
+1785996966,e5-2680-cpuonly-63g-04c2,qwen3.6-35b-a3b-mtp,opt_ks_mtp1,q4_k_s,32768,1,1,none,off,f16,14,draft-mtp:d1,decode,77.0,256.0,58.432,17.648,17.648,1.318,0.848,3
+1785997077,e5-2680-cpuonly-63g-04c2,qwen3.6-35b-a3b-mtp,opt_ks_mtp2,q4_k_s,32768,1,1,none,off,f16,14,draft-mtp:d2,decode,77.0,256.0,58.248,17.736,17.736,1.322,0.714,3
