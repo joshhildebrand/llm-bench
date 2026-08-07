@@ -1,0 +1,13 @@
+{
+  "machine_id": "e5-2430-cpuonly-94g-b6f0",
+  "first_seen": 1786071553,
+  "specs": {
+    "cpu": "Intel(R) Xeon(R) CPU E5-2430 0 @ 2.20GHz",
+    "cpu_cores_physical": 6,
+    "cpu_cores_logical": 12,
+    "ram_gb": 94.2,
+    "gpus": [],
+    "gpu_summary": "no-nvidia-gpu",
+    "os": "Linux 7.0.2-6-pve"
+  }
+}
