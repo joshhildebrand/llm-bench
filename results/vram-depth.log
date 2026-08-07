@@ -9,3 +9,15 @@
 02:23:51 laguna-xs-2.1 q4_k_m ctx=131072 kv=q4_0 vram_mib=15006,11284
 02:27:28 qwen3-coder-next q2_k_xl ctx=131072 kv=q8_0 vram_mib=15354,11506
 02:30:17 qwen3.6-27b-mtp iq4_xs ctx=131072 kv=q8_0 vram_mib=14107,10188
+02:56:42 qwen3-coder-30b-a3b-instruct iq4_xs ctx=131072 kv=q8_0 vram_mib=15262,11600
+02:57:54 ornith-1.0-35b q4_k_m ctx=262144 kv=q8_0 vram_mib=15563,12822
+03:00:27 nex-n2-mini q4_k_m ctx=131072 kv=q8_0 vram_mib=15285,11478
+03:22:14 ornith-1.0-35b q4_k_m ctx=262144 p=8 kv=q8_0 vram_mib=15567,13028
+03:30:53 qwen3.6-35b-a3b-mtp iq4_xs ctx=262144 p=8 kv=q8_0 vram_mib=15554,11894
+03:39:23 gemma-4-26b-a4b-it-qat q4_k_xl ctx=262144 p=8 kv=q8_0 vram_mib=13452,9584
+03:52:09 qwythos-9b-claude-mythos-5-1m q8_0 ctx=131072 kv=q8_0 vram_mib=9172,6922
+03:55:23 google/gemma-4-26b-a4b q8_0 ctx=131072 kv=q8_0 vram_mib=10856,5758
+04:04:47 bonsai-27b q1_0 ctx=131072 kv=q8_0 vram_mib=8335,5288
+04:08:41 hermes-4.3-36b ctx=131072 LOAD_FAILED
+10:53:55 hermes-4.3-36b q3_k_m ctx=131072 kv=q4_0 vram_mib=15802,13992
+12:44:09 hermes-4.3-36b q3_k_m ctx=131072 kv=q4_0 vram_mib=15677,13992
