@@ -1,0 +1,11 @@
+01:56:39 qwen3-coder-30b-a3b-instruct iq4_xs ctx=131072 kv=q8_0 vram_mib=15392,11600
+01:58:31 ornith-1.0-35b q4_k_m ctx=131072 kv=q8_0 vram_mib=15033,11374
+02:01:04 qwen3.6-35b-a3b-mtp iq4_xs ctx=131072 kv=q8_0 vram_mib=15083,10240
+02:03:42 gemma-4-26b-a4b-it-qat q4_k_xl ctx=131072 kv=q8_0 vram_mib=14397,8686
+02:06:16 gpt-oss-20b q8_k_xl ctx=131072 kv=q8_0 vram_mib=10555,7630
+02:08:08 qwen3.6-27b-mtp iq4_xs ctx=131072 kv=q8_0 vram_mib=14141,9354
+02:14:08 ornith-1.0-35b q4_k_m ctx=131072 kv=q8_0 vram_mib=15079,11394
+02:15:15 laguna-xs-2.1 q4_k_m ctx=131072 kv=q4_0 vram_mib=15029,11304
+02:23:51 laguna-xs-2.1 q4_k_m ctx=131072 kv=q4_0 vram_mib=15006,11284
+02:27:28 qwen3-coder-next q2_k_xl ctx=131072 kv=q8_0 vram_mib=15354,11506
+02:30:17 qwen3.6-27b-mtp iq4_xs ctx=131072 kv=q8_0 vram_mib=14107,10188
