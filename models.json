@@ -338,6 +338,25 @@
       "mtp": false,
       "thinking": "allow",
       "note": "Gemma 4 MoE 26B total / A4B active, QAT UD-Q4_K_XL (16.5 GB), 262144 max ctx, tool_use. BEST THROUGHPUT-PER-GB on f732 for agent-depth work (2026-08-07): 94.7 empty -> 50.7 at 69k KV depth (0.54x), beating gpt-oss-20b at every depth past 2k from a similar footprint. Third overall at depth behind ornith-1.0-35b and qwen3.6-35b-a3b."
+    },
+    {
+      "key": "unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf",
+      "hf_repo": "unsloth/GLM-4.5-Air-GGUF",
+      "quants": [
+        "q4_k_s"
+      ],
+      "contexts": [
+        32768
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "Zhipu GLM-4.5-Air, arch glm4moe. MoE 106B total / 12B active. Q4_K_S is 67.0 GB -- LARGER THAN SYSTEM RAM (63.6 GB) on f732, so mmap paging is mandatory (keep_in_ram=false, mmap=true); it works, and free physical RAM sitting at ~0.1 GB is normal clean page cache, not danger. Free COMMIT stayed >54 GB and ramguard never triggered. TUNED BEST (f732 2026-08-07): cpu_experts=0.60, ctx 32768, flash on, KV q8_0, threads 8 -> 9.7 tok/s decode, 187 tok/s prefill, 24.5 GB VRAM. LM Studio CLAMPS below 0.60 (0.50/0.40 load byte-identical placements). Threads are irrelevant (t4 9.31 / t8 9.66 / t12 9.51 / t16 9.31) -- RAM-bandwidth-bound, not CPU-bound. Loses to gpt-oss-120b on both axes (21.2 decode / 326 prefill) despite a bigger file: hybrid decode tracks ACTIVE params (12B vs 5.1B), not total size. Not recommended on this box; unusable as an agent backend."
     }
   ]
 }

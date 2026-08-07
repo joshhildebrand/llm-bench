@@ -489,3 +489,17 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1786121392,7-9800x3d-2x5060ti16g-64g-f732,hermes-4.3-36b,depth_11k_ctx128k,q3_k_m,131072,1,1,max,on,q4_0,8,off,decode,11306.0,2.0,25483.593,4.548,4.548,0.444,None,3
 1786121505,7-9800x3d-2x5060ti16g-64g-f732,hermes-4.3-36b,depth_46k_ctx128k,q3_k_m,131072,1,1,max,on,q4_0,8,off,decode,45099.0,2.0,49079.227,2.301,2.301,0.919,None,3
 1786121656,7-9800x3d-2x5060ti16g-64g-f732,hermes-4.3-36b,depth_69k_ctx128k,q3_k_m,131072,1,1,max,on,q4_0,8,off,decode,67631.0,2.0,50735.972,1.589,1.589,1.333,None,3
+1786135071,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp1.0,q4_k_s,32768,1,1,max,on,q8_0,8,off,decode,72.0,256.0,100.106,4.987,4.987,0.719,None,3
+1786135870,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.85,q4_k_s,32768,1,1,max,on,q8_0,8,off,decode,72.0,256.0,331.651,8.742,8.742,0.217,None,3
+1786136321,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.85,q4_k_s,32768,1,1,max,on,q8_0,8,off,prefill,11049.0,1.0,102.363,1000000.0,1000000.0,107.949,None,3
+1786136508,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.70,q4_k_s,32768,1,1,max,on,q8_0,8,off,decode,72.0,256.0,300.58,9.368,9.368,0.24,None,3
+1786136775,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.70,q4_k_s,32768,1,1,max,on,q8_0,8,off,prefill,11048.0,1.0,174.672,1000000.0,1000000.0,63.25,None,3
+1786136958,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.60,q4_k_s,32768,1,1,max,on,q8_0,8,off,decode,72.0,256.0,308.036,9.657,9.657,0.234,None,3
+1786137210,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.60,q4_k_s,32768,1,1,max,on,q8_0,8,off,prefill,11050.0,1.0,186.959,1000000.0,1000000.0,59.104,None,3
+1786137392,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.50,q4_k_s,32768,1,1,max,on,q8_0,8,off,decode,72.0,256.0,287.777,9.652,9.652,0.25,None,3
+1786137645,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.50,q4_k_s,32768,1,1,max,on,q8_0,8,off,prefill,11049.0,1.0,184.636,1000000.0,1000000.0,59.842,None,3
+1786137830,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.40,q4_k_s,32768,1,1,max,on,q8_0,8,off,decode,72.0,256.0,293.821,9.6,9.6,0.245,None,3
+1786138082,7-9800x3d-2x5060ti16g-64g-f732,unsloth/glm-4.5-air-gguf/glm-4.5-air-q4_k_s.gguf,ctx32k_exp0.40,q4_k_s,32768,1,1,max,on,q8_0,8,off,prefill,11049.0,1.0,186.305,1000000.0,1000000.0,59.306,None,3
+1786138277,7-9800x3d-2x5060ti16g-64g-f732,glm-4.5-air,ctx32k_exp0.60_t16,q4_k_s,32768,1,1,max,on,q8_0,16,off,decode,72.0,256.0,284.177,9.313,9.313,0.253,None,3
+1786138461,7-9800x3d-2x5060ti16g-64g-f732,glm-4.5-air,ctx32k_exp0.60_t12,q4_k_s,32768,1,1,max,on,q8_0,12,off,decode,72.0,256.0,292.439,9.507,9.507,0.246,None,3
+1786138651,7-9800x3d-2x5060ti16g-64g-f732,glm-4.5-air,ctx32k_exp0.60_t4,q4_k_s,32768,1,1,max,on,q8_0,4,off,decode,72.0,256.0,290.593,9.31,9.31,0.248,None,3
