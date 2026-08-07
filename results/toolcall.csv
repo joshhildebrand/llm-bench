@@ -25,3 +25,4 @@ timestamp,machine_id,model,scenario,label,trials,completed,pass_rate,summed_ever
 1786121997,7-9800x3d-2x5060ti16g-64g-f732,qwen3.6-35b-a3b-mtp,hard,tc_hard_depth11k,5,5,1.0,0,6,0,0,0,0,5,9,22.77,
 1786122156,7-9800x3d-2x5060ti16g-64g-f732,gemma-4-26b-a4b-it-qat,hard,tc_hard_depth11k,5,5,1.0,0,6,0,0,0,0,5,9,27.95,
 1786122268,7-9800x3d-2x5060ti16g-64g-f732,gpt-oss-20b,hard,tc_hard_depth11k,5,5,1.0,0,6,0,0,0,0,5,7,19.4,
+1786122576,7-9800x3d-2x5060ti16g-64g-f732,qwen3-coder-30b-a3b-instruct,hard,tc_hard_depth11k_nocache,5,5,1.0,0,6,0,0,0,0,5,9,27.24,

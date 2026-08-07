@@ -46,6 +46,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
+import uuid
 
 import machine
 
@@ -214,12 +215,12 @@ def strip_think(t):
     return re.sub(r"<think>.*?</think>", "", t or "", flags=re.S)
 
 
-def run_trial(args, sc):
+def run_trial(args, sc, nonce=""):
     url = args.host.rstrip("/") + "/v1/chat/completions"
     task = sc["task"]
     if args.depth_prefix:
         with open(args.depth_prefix) as f:
-            task = (f.read().rsplit("\n\n", 1)[0]
+            task = (nonce + f.read().rsplit("\n\n", 1)[0]
                     + "\n\n---\nIgnore the passage above; it is background "
                       "context only.\n\n" + task)
     msgs = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": task}]
@@ -273,7 +274,9 @@ def main():
     steps, errs, wrongs, secs, calls, forb, dec, rec = ([] for _ in range(8))
     fatal = None
     for i in range(args.trials):
-        t, wall, err = run_trial(args, sc)
+        nonce = (f"[session {uuid.uuid4().hex[:12]}]\n"
+                 if args.vary_prefix else "")
+        t, wall, err = run_trial(args, sc, nonce)
         if err:
             fatal = err
             print(f"[toolcall]   trial {i+1}: FATAL {err}", file=sys.stderr)
@@ -337,6 +340,10 @@ if __name__ == "__main__":
     p.add_argument("--timeout", type=float, default=300.0)
     p.add_argument("--depth-prefix", default=None, dest="depth_prefix",
                    help="prepend this file to the task so tool use is exercised at depth")
+    p.add_argument("--vary-prefix", action="store_true", dest="vary_prefix",
+                   help="prepend a unique nonce per trial so the server prompt "
+                        "cache is cold every time (isolates cache effects from "
+                        "model behaviour)")
     p.add_argument("--label", default="")
     p.add_argument("--machine-id", default=None, dest="machine_id")
     p.add_argument("--out", default="results/toolcall.csv")
