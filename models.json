@@ -357,6 +357,25 @@
       "mtp": false,
       "thinking": "allow",
       "note": "Zhipu GLM-4.5-Air, arch glm4moe. MoE 106B total / 12B active. Q4_K_S is 67.0 GB -- LARGER THAN SYSTEM RAM (63.6 GB) on f732, so mmap paging is mandatory (keep_in_ram=false, mmap=true); it works, and free physical RAM sitting at ~0.1 GB is normal clean page cache, not danger. Free COMMIT stayed >54 GB and ramguard never triggered. TUNED BEST (f732 2026-08-07): cpu_experts=0.60, ctx 32768, flash on, KV q8_0, threads 8 -> 9.7 tok/s decode, 187 tok/s prefill, 24.5 GB VRAM. LM Studio CLAMPS below 0.60 (0.50/0.40 load byte-identical placements). Threads are irrelevant (t4 9.31 / t8 9.66 / t12 9.51 / t16 9.31) -- RAM-bandwidth-bound, not CPU-bound. Loses to gpt-oss-120b on both axes (21.2 decode / 326 prefill) despite a bigger file: hybrid decode tracks ACTIVE params (12B vs 5.1B), not total size. Not recommended on this box; unusable as an agent backend."
+    },
+    {
+      "key": "deepseek-v4-flash-0731@iq1_s",
+      "hf_repo": "unsloth/DeepSeek-V4-Flash-0731-GGUF",
+      "quants": [
+        "iq1_s"
+      ],
+      "contexts": [
+        16384
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "off"
+      ],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "DeepSeek-V4-Flash-0731, arch deepseek4. MoE 284B total / 13B active (256 routed experts, top-6 + 1 shared), 1M ctx. Smallest quant is UD-IQ1_S at 82.5 GB -- the 10.9/11.3 GB files in the repo are the DSpark speculative-decode draft (arch 'dflash'), NOT small quants. CPU-ONLY on f732: ANY CPU/GPU split crashes llama.cpp 2.27.1 with GGML_ASSERT(n_inputs < GGML_SCHED_MAX_SPLIT_INPUTS) at ggml-backend.cpp:1367 (256 experts exceed the scheduler's split-input cap); offload<=0.25 'loads' only because nothing is actually placed on GPU. llama.cpp 2.28.1 beta FIXES the assert but then drives free commit to ~1 GB and trips ramguard -- unsurvivable on 64 GB RAM. MEASURED (2.27.1, CPU-only, ctx 16384, threads 8, mmap, keep_in_ram=false): 4.45 tok/s decode, 16.1 tok/s prefill. Threads irrelevant (t6 4.23 / t8 4.45 / t16 4.32). PREFILL is the disqualifier: 16 tok/s = ~11 min for an 11k agent turn, vs gpt-oss-120b's 326 tok/s in a smaller footprint. Not usable on this box."
     }
   ]
 }

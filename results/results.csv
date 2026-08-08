@@ -503,3 +503,10 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 1786138277,7-9800x3d-2x5060ti16g-64g-f732,glm-4.5-air,ctx32k_exp0.60_t16,q4_k_s,32768,1,1,max,on,q8_0,16,off,decode,72.0,256.0,284.177,9.313,9.313,0.253,None,3
 1786138461,7-9800x3d-2x5060ti16g-64g-f732,glm-4.5-air,ctx32k_exp0.60_t12,q4_k_s,32768,1,1,max,on,q8_0,12,off,decode,72.0,256.0,292.439,9.507,9.507,0.246,None,3
 1786138651,7-9800x3d-2x5060ti16g-64g-f732,glm-4.5-air,ctx32k_exp0.60_t4,q4_k_s,32768,1,1,max,on,q8_0,4,off,decode,72.0,256.0,290.593,9.31,9.31,0.248,None,3
+1786169897,7-9800x3d-2x5060ti16g-64g-f732,deepseek-v4-flash-0731,cpuonly_ctx4k,iq1_s,4096,1,1,off,on,q8_0,8,off,decode,70.0,128.0,163.869,4.425,4.425,0.428,None,2
+1786170347,7-9800x3d-2x5060ti16g-64g-f732,deepseek-v4-flash-0731,cpuonly_ctx16k_t8,iq1_s,16384,1,1,off,on,q8_0,8,off,decode,70.0,128.0,168.923,4.451,4.451,0.415,None,2
+1786170627,7-9800x3d-2x5060ti16g-64g-f732,deepseek-v4-flash-0731,cpuonly_ctx16k_t8,iq1_s,16384,1,1,off,on,q8_0,8,off,prefill,1403.5,1.0,16.106,1000000.0,1000000.0,87.158,None,2
+1786170772,7-9800x3d-2x5060ti16g-64g-f732,deepseek-v4-flash-0731,cpuonly_ctx16k_t16,iq1_s,16384,1,1,off,on,q8_0,16,off,decode,70.0,128.0,173.606,4.315,4.315,0.403,None,2
+1786171026,7-9800x3d-2x5060ti16g-64g-f732,deepseek-v4-flash-0731,cpuonly_ctx16k_t16,iq1_s,16384,1,1,off,on,q8_0,16,off,prefill,1404.5,1.0,17.092,1000000.0,1000000.0,82.206,None,2
+1786171174,7-9800x3d-2x5060ti16g-64g-f732,deepseek-v4-flash-0731,cpuonly_ctx16k_t6,iq1_s,16384,1,1,off,on,q8_0,6,off,decode,70.0,128.0,144.128,4.232,4.232,0.486,None,2
+1786171406,7-9800x3d-2x5060ti16g-64g-f732,deepseek-v4-flash-0731,cpuonly_ctx16k_t6,iq1_s,16384,1,1,off,on,q8_0,6,off,prefill,1404.0,1.0,19.809,1000000.0,1000000.0,70.896,None,2
