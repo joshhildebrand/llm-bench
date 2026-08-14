@@ -1,0 +1,27 @@
+{
+  "machine_id": "e5-2680-1xteslapg50021632g-110g-3078",
+  "first_seen": 1786668690,
+  "specs": {
+    "cpu": "Intel(R) Xeon(R) CPU E5-2680 v4 @ 2.40GHz",
+    "cpu_cores_physical": 28,
+    "cpu_cores_logical": 56,
+    "ram_gb": 110.0,
+    "gpus": [
+      {
+        "index": 0,
+        "name": "Tesla PG500-216",
+        "vram_mib": 32768,
+        "pcie_gen_max": 3,
+        "pcie_width_max": 16,
+        "pcie_gen_cur": 3,
+        "pcie_width_cur": 16
+      }
+    ],
+    "gpu_summary": "Tesla PG500-216 32GB",
+    "os": "Linux 7.0.14-11-pve",
+    "gpu_note": "Tesla V100-PCIE-32GB (GV100GL, reported as 'Tesla PG500-216'), sm_70 Volta, 72 SM, SM clock max 1380 MHz, 32768 MiB HBM2 4096-bit @ 1107 MHz, ECC ON, 250 W cap. Measured 964.8 GB/s of 1133.6 GB/s theoretical (85%, saxpy). PCIe Gen3 x16, no downtraining. Terminal software window: driver 580.178.04 is the LAST branch supporting Volta and CUDA 12.9 is the LAST toolkit that can target sm_70 - both pinned, NVIDIA apt repo deliberately absent.",
+    "ram_note": "14x8GB DDR4-2666 single-rank RDIMM at 2400 MT/s (Broadwell-EP IMC ceiling), 7 per socket so one channel per socket is half-filled (a stick failed; symmetry preferred over channel balance). 2 NUMA nodes. STREAM Triad: 42.9 GB/s single-node, 27.8 cross-QPI, 85.7 dual-socket first-touch. The GPU alone has ~11x the bandwidth of the whole 28-core complex.",
+    "cpu_note": "Broadwell-EP, AVX2+FMA, NO AVX-512/VNNI. Both sockets populated (28c/56t). GPU sits on CPU2's root complex = NUMA node 1, so GPU-feeding work wants 'numactl --cpunodebind=1 --membind=1' - the OPPOSITE of the --interleave=all advice that suits CPU-only MoE runs on this same box."
+  },
+  "note": "GPU box: Dell XC730xd-12 (pve06) reassigned to V100/LLM testing 2026-08-13. Served by llama.cpp llama-server from the fiveforge/llama.cpp fork (branch wp-g2), NOT LM Studio and NOT upstream - see defiant/benchmarks/2026-08-14-v100-qwen36-256k.md. Do not compare against the 'e5-2680-cpuonly-63g-b105' rows: that id is the same chassis before CPU2/RAM landed and before the GPU existed, and it is single-socket 63 GB CPU-only."
+}
