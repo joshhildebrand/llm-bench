@@ -28,8 +28,12 @@ BASE = (
 # grow with context, and on models with a mixed global/sliding-window attention layout
 # a 16k probe is too shallow to show it. Regenerating is byte-stable, so the 2k/16k
 # files (and every row already benchmarked against them) are unaffected.
+# NOTE the file names are *targets* under a 4-chars/token heuristic; this prose
+# actually tokenises at ~5.5 chars/token, so the real depths are ~1.4k / ~11k /
+# ~46k / ~69k. prefill_96k exists to clear Hermes Agent's MINIMUM_CONTEXT_LENGTH
+# of 64_000 with a genuine >64k KV depth -- the 64k file lands well under it.
 TARGETS = {"prefill_2k.txt": 2000, "prefill_16k.txt": 16000,
-           "prefill_64k.txt": 64000}
+           "prefill_64k.txt": 64000, "prefill_96k.txt": 96000}
 INSTRUCTION = (
     "\n\nBased only on the passage above, reply with exactly one word: OK"
 )
