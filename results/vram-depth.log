@@ -21,3 +21,4 @@
 04:08:41 hermes-4.3-36b ctx=131072 LOAD_FAILED
 10:53:55 hermes-4.3-36b q3_k_m ctx=131072 kv=q4_0 vram_mib=15802,13992
 12:44:09 hermes-4.3-36b q3_k_m ctx=131072 kv=q4_0 vram_mib=15677,13992
+00:58:02 muse-glimmer-30b q4_k_xl ctx=131072 kv=q8_0 vram_mib=10593,8778
