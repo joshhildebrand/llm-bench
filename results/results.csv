@@ -618,3 +618,5 @@ timestamp,machine_id,model,label,quant,ctx,parallel,concurrency,gpu_ratio,flash,
 2026-08-18T00:20:00,e5-2680-1xteslapg50021632g-110g-3078,qwen3.8-27b,q38-s3-mtp4,ud-q4_k_xl,262144,1,1,max,on,q8_0,,on,decode,1065,128,,47.68,47.68,,0.59,3
 2026-08-18T00:50:00,e5-2680-1xteslapg50021632g-110g-3078,qwen3.8-27b,q38-s3-ngram-mod,ud-q4_k_xl,262144,1,1,max,on,q8_0,,ngram,prefill,1065,128,920.6,,,,,3
 2026-08-18T00:50:00,e5-2680-1xteslapg50021632g-110g-3078,qwen3.8-27b,q38-s3-ngram-mod,ud-q4_k_xl,262144,1,1,max,on,q8_0,,ngram,decode,1065,128,,54.87,54.87,,,3
+2026-08-18T03:30:00,e5-2680-1xteslapg50021632g-110g-3078,qwen3.8-27b,q38-s3-mtp2-ngram24,ud-q4_k_xl,262144,1,1,max,on,q8_0,,mtp+ngram,prefill,1065,128,879.4,,,,0.91,3
+2026-08-18T03:30:00,e5-2680-1xteslapg50021632g-110g-3078,qwen3.8-27b,q38-s3-mtp2-ngram24,ud-q4_k_xl,262144,1,1,max,on,q8_0,,mtp+ngram,decode,1065,128,,110.59,110.59,,0.91,3
