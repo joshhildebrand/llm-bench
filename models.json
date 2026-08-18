@@ -376,6 +376,26 @@
       "mtp": false,
       "thinking": "allow",
       "note": "DeepSeek-V4-Flash-0731, arch deepseek4. MoE 284B total / 13B active (256 routed experts, top-6 + 1 shared), 1M ctx. Smallest quant is UD-IQ1_S at 82.5 GB -- the 10.9/11.3 GB files in the repo are the DSpark speculative-decode draft (arch 'dflash'), NOT small quants. CPU-ONLY on f732: ANY CPU/GPU split crashes llama.cpp 2.27.1 with GGML_ASSERT(n_inputs < GGML_SCHED_MAX_SPLIT_INPUTS) at ggml-backend.cpp:1367 (256 experts exceed the scheduler's split-input cap); offload<=0.25 'loads' only because nothing is actually placed on GPU. llama.cpp 2.28.1 beta FIXES the assert but then drives free commit to ~1 GB and trips ramguard -- unsurvivable on 64 GB RAM. MEASURED (2.27.1, CPU-only, ctx 16384, threads 8, mmap, keep_in_ram=false): 4.45 tok/s decode, 16.1 tok/s prefill. Threads irrelevant (t6 4.23 / t8 4.45 / t16 4.32). PREFILL is the disqualifier: 16 tok/s = ~11 min for an 11k agent turn, vs gpt-oss-120b's 326 tok/s in a smaller footprint. Not usable on this box."
+    },
+    {
+      "key": "muse-glimmer-30b",
+      "hf_repo": "unsloth/Muse-Glimmer-30B-GGUF",
+      "quants": [
+        "q4_k_xl",
+        "q5_k_xl"
+      ],
+      "contexts": [
+        131072
+      ],
+      "parallel": [
+        1
+      ],
+      "gpu": [
+        "max"
+      ],
+      "mtp": false,
+      "thinking": "allow",
+      "note": "Meta Muse-Glimmer-30B (released 2026-08-10, Apache 2.0). DENSE 30B (28B reported), arch 'muse-glimmer', 52 layers, ctx 131072 CONFIRMED from GGUF metadata (not the announcement's vague '120k+'). MEASURED ON f732 2026-08-12, ctx=131072, single stream, empty cache unless noted.\nBEST CONFIG: q4_k_xl + kcache/vcache=q8_0 + kv_to_gpu=TRUE = 24.71 tok/s (prefill 908 @16k). That is +26.4% over the naive f16/kv_to_gpu=false start (19.56).\nQ4_K_XL ladder: f16/false 19.56 | q8_0/false 20.85 | q8_0/TRUE 24.71 (BEST, reproduced 24.75 by depth.sh) | q4_0/false 21.57 | q4_0/true 24.31 (no gain below q8_0 - stop at q8_0).\nQ5_K_XL ladder: f16/false 15.61 | f16/TRUE 12.47 | q8_0/TRUE 18.75 (best for Q5). prefill 817 @16k.\nkv_to_gpu IS CONDITIONAL, NOT UNIVERSAL: +18.5% on Q4+q8_0 (headroom), but -20% on Q5+f16 (VRAM pressure: 20.29GiB weights + ~7GB f16 KV across 2x16GiB cards). Rule: enable it only when weights+KV leave headroom.\nDEPTH (Q4_K_XL, q8_0 KV, kv_to_gpu=true): empty 24.75 | 2k 24.20 | 11k 22.95 | 46k 21.30 | 69k 20.02. Only -19% empty->69k - unusually FLAT vs laguna-xs (-84%). Safe for agent harnesses at depth.\nWHY IT IS ONLY ~25 tok/s: DENSE, so every token streams ALL weights - unlike the MoE models here. Decode is cleanly bandwidth-bound: Q4->Q5 decode ratio 1.253x vs weight-size ratio 1.276x. So quant is a DIRECT speed dial; the MoE 'flat quant curve' rule does NOT transfer. Use sweep_dense.sh, NOT sweep.sh (whose cpu_experts rows are meaningless for a dense model).\nDFLASH IS UNUSABLE (both paths): Meta claims 3.1x via DFlash speculative decoding, shipped as a separate dflash-kquant.gguf (1.63GB, arch 'dflash', 2.6B). (a) LM STUDIO: loads cleanly via --speculative-draft-simple --speculative-draft-model 'muse-glimmer-30b@?' and IS resident (+2.1GiB VRAM), but ACCEPTANCE = 0.0 and decode drops to 12.97 (-17%) - pure loss. Different failure mode from the Qwen3.6-DFlash note (that one failed to init); root cause is the same: draft-simple runs it as an ordinary draft model, but dflash taps the target's hidden states, so every token is rejected. (b) LOCAL llama.cpp FORK (226d0b732): has dflash support but NO muse-glimmer arch, so it cannot load the TARGET at all. Getting the 3.1x needs a llama.cpp new enough for muse-glimmer + real dflash wiring.\nVISION: mmproj files exist upstream (2.05-3.85GB) but were NOT downloaded; model runs text-only, no disable_vision.sh needed. KV IS CHEAP: head_count_kv=2 vs 32 q-heads (16:1 GQA) -> full 131k f16 KV is only ~7GB, so context is nearly free and WEIGHTS decide the fit. Q6_K_XL (26.3GB) likely also fits full ctx - untested."
     }
   ]
 }
